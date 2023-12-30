@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "539682468319",
+    "project_id": "hooby-33d43",
+    "storage_bucket": "hooby-33d43.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:539682468319:android:00a65dadb4f5b5d0c5546a",
+        "android_client_info": {
+          "package_name": "com.example.hubby"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkXfMhQdqXFGaPMCMpetz-QcavkYNGKtc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
