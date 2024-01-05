@@ -18,8 +18,7 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CheckboxDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -27,13 +26,11 @@ import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.SpanStyle
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -44,19 +41,26 @@ import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import com.example.hubby.data.model.LoginViewModel
+import com.example.hubby.ui.navigation.Screens
 
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun SignupScreen(){
-  var username by remember { mutableStateOf("") }
-    var email by remember { mutableStateOf("") }
-    var password by remember { mutableStateOf("") }
-    var checkBoxOneState by remember { mutableStateOf(true) }
+fun SignupScreen(
+    loginViewModel: LoginViewModel,
+    navController: NavHostController
+) {
 
+    //var checkBoxOneState = remember { mutableStateOf(true) }
+
+
+    val loginUiState = loginViewModel?.loginUiState
+    val isError = loginUiState?.signUpError != null
+    val context = LocalContext.current
 
     Box(
         modifier = Modifier
@@ -111,8 +115,10 @@ fun SignupScreen(){
         horizontalAlignment = Alignment.CenterHorizontally
     ) {
 
+
         OutlinedTextField(
-            value = username, onValueChange = { username = it },
+            value = loginUiState?.userNameSignUp ?: "",
+            onValueChange = { loginViewModel.onUserNameChangeSignUp(it) },
             label = {
                 Text(text = "Name", color = Color.Gray)
             },
@@ -124,9 +130,11 @@ fun SignupScreen(){
                 keyboardType = KeyboardType.Email
             ),
             singleLine = true,
+            isError = isError
         )
         OutlinedTextField(
-            value = email, onValueChange = { email = it },
+            value = loginUiState?.emailSignUp ?: "",
+            onValueChange = { loginViewModel.onEmailChangeSignUp(it) },
             label = {
                 Text(text = "Email", color = Color.Gray)
             },
@@ -139,9 +147,11 @@ fun SignupScreen(){
                 keyboardType = KeyboardType.Email
             ),
             singleLine = true,
+            isError = isError
         )
         OutlinedTextField(
-            value = password, onValueChange = { email = it },
+            value = loginUiState?.passwordSignUp ?: "",
+            onValueChange = { loginViewModel.onPasswordChangeSignUp(it) },
             label = {
                 Text(text = "Password", color = Color.Gray)
             },
@@ -155,60 +165,64 @@ fun SignupScreen(){
             ),
             singleLine = true,
             visualTransformation = PasswordVisualTransformation(),
-
+            isError = isError
         )
-        Row (
+        Row(
             modifier = Modifier
                 .padding(top = 10.dp)
                 .padding(horizontal = 20.dp)
                 .fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically
-        ){
-            Checkbox(checked = checkBoxOneState , onCheckedChange ={checkBoxOneState = it},
+        ) {
+            /*Checkbox(
+                checked = checkBoxOneState.value, onCheckedChange = { checkBoxOneState.value = it },
                 colors = CheckboxDefaults.colors(
                     checkedColor = Color.Gray
                 ),
-
-
-                )
+                )*/
             Spacer(modifier = Modifier.width(6.dp))
-            Text( text = buildAnnotatedString {
-                withStyle(style = SpanStyle(textDecoration = TextDecoration.Underline)){
-                    append("I would like to received your newsletter and other promotional information.")
-                }
-            },
+            Text(
+                text = buildAnnotatedString {
+                    withStyle(style = SpanStyle(textDecoration = TextDecoration.Underline)) {
+                        append("I would like to received your newsletter and other promotional information.")
+                    }
+                },
                 color = Color.Unspecified,
                 fontSize = 12.sp
-                ) 
+            )
 
         }
 
-        Button(onClick = {},
+        Button(
+            onClick = {
+                loginViewModel?.createUser(context)
+            },
             colors = ButtonDefaults.buttonColors(
-               // renk
-              containerColor =Color(0xFFC9F299) , Color(0xFF9CBFA7)
+                // renk
+                containerColor = Color(0xFFC9F299), Color(0xFF9CBFA7)
             ),
             modifier = Modifier
                 .fillMaxWidth()
                 .padding(horizontal = 30.dp)
                 .padding(top = 10.dp),
             contentPadding = PaddingValues(vertical = 18.dp),
-            ) {
+        ) {
             Text(
                 text = "Sign Up",
-              fontSize = 14.sp,
+                fontSize = 14.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.White)
+                color = Color.White
+            )
         }
         Spacer(modifier = Modifier.height(10.dp))
-       Column (
-           modifier =Modifier
-               .padding(horizontal = 30.dp)
-               .padding(top = 20.dp),
-           verticalArrangement = Arrangement.Center,
-           horizontalAlignment = Alignment.CenterHorizontally
+        Column(
+            modifier = Modifier
+                .padding(horizontal = 30.dp)
+                .padding(top = 20.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally
 
-       ){
+        ) {
 
             Text(
                 text = "By clicking Sign Up, you agree to Hubby's Terms of Use and Privacy Policy.",
@@ -220,7 +234,8 @@ fun SignupScreen(){
                 ),
                 color = Color.Black
 
-            ) }
+            )
+        }
         Spacer(modifier = Modifier.height(180.dp))
 
 
@@ -232,18 +247,29 @@ fun SignupScreen(){
 
         )
 
+        if(isError){
+            Text(text = loginUiState?.signUpError ?: "unknown error")
+        }
+
+        if (loginUiState?.isLoading == true) {
+            CircularProgressIndicator()
+        }
+
+        LaunchedEffect(key1 = loginViewModel?.hasUser) {
+            if (loginViewModel?.hasUser == true) {
+                navController.navigate(Screens.Home.name)
+            }
+
+        }
+
 
     }
 
 }
 
 
-
-
-
-
-@Preview
+/*@Preview
 @Composable
 fun SignupScreenPreview() {
     SignupScreen()
-}
+}*/
