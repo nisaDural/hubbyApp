@@ -20,6 +20,7 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.OutlinedTextField
@@ -27,6 +28,7 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -35,6 +37,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
@@ -42,18 +45,19 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.text.input.PasswordVisualTransformation
 import androidx.compose.ui.text.input.VisualTransformation
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.hubby.R
+import com.example.hubby.data.model.LoginViewModel
 
 
 @Composable
 fun LoginScreen(
     onLoginInButtonClicked: () -> Unit = {},
-    onSignUpButtonClicked: () -> Unit = {}
+    onSignUpButtonClicked: () -> Unit = {},
+    loginViewModel: LoginViewModel,
 ) {
-    ThreeTextWithCard(onLoginInButtonClicked, onSignUpButtonClicked)
+    ThreeTextWithCard(onLoginInButtonClicked, onSignUpButtonClicked, loginViewModel)
     // LoginArea()
 }
 
@@ -63,23 +67,26 @@ fun LoginScreen(
 @Composable
 fun ThreeTextWithCard(
     onLoginInButtonClicked: () -> Unit = {},
-    onSignUpButtonClicked: () -> Unit = {}
+    onSignUpButtonClicked: () -> Unit = {},
+    loginViewModel: LoginViewModel
 ) {
-    var email by remember { mutableStateOf("") }
-    var password by remember {
+
+    val loginUiState = loginViewModel?.loginUiState
+    val isError = loginUiState?.loginError != null
+    val context = LocalContext.current
+
+    val email = remember { mutableStateOf("") }
+    val password = remember {
         mutableStateOf("")
     }
     var passwordVisible by remember {
         mutableStateOf(false)
     }
+
     Surface(
         modifier = Modifier
             .fillMaxSize()
-
-
     ) {
-
-
         Box(
             modifier = Modifier
                 .fillMaxSize()
@@ -88,7 +95,6 @@ fun ThreeTextWithCard(
             contentAlignment = Alignment.Center
 
         ) {
-
 
             Column(
                 verticalArrangement = Arrangement.Center,
@@ -121,7 +127,6 @@ fun ThreeTextWithCard(
                     color = Color.White
                 )
 
-
                 Spacer(modifier = Modifier.height(155.dp))
 
                 // CARD
@@ -152,7 +157,8 @@ fun ThreeTextWithCard(
                             modifier = Modifier.padding(top = 16.dp)
                         )
                         OutlinedTextField(
-                            value = email, onValueChange = { email = it },
+                            value = loginUiState?.email ?: "",
+                            onValueChange = { loginViewModel?.onEmailChange(it) },
                             label = {
                                 Text(text = "Email", color = Color.Gray)
                             },
@@ -165,10 +171,13 @@ fun ThreeTextWithCard(
                                 keyboardType = KeyboardType.Email
                             ),
                             singleLine = true,
+                            isError = isError
                         )
 
 //  sifreyi gösterme gizleme
-                        OutlinedTextField(value = password, onValueChange = { password = it },
+                        OutlinedTextField(
+                            value = loginUiState?.password ?: "",
+                            onValueChange = { loginViewModel.onPasswordChange(it) },
                             label = {
                                 Text(text = "Password", color = Color.Gray)
                             },
@@ -180,8 +189,6 @@ fun ThreeTextWithCard(
                                 keyboardType = KeyboardType.Password
                             ),
                             singleLine = true,
-
-
                             visualTransformation = if (passwordVisible) {
                                 VisualTransformation.None
                             } else {
@@ -196,13 +203,18 @@ fun ThreeTextWithCard(
                                         passwordVisible = !passwordVisible
                                     }
                                 )
-                            }
+                            },
+                            isError = isError
 
 ///
                         )
 
                         Button(
-                            onClick = onLoginInButtonClicked,
+                            onClick = {
+                                loginViewModel.loginUser(
+                                    context
+                                )
+                            },
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = 17.dp)
@@ -292,6 +304,20 @@ fun ThreeTextWithCard(
                         }
                         Spacer(modifier = Modifier.height(10.dp))
 
+                        if (isError) {
+                            Text(text = loginUiState?.loginError ?: "unknown error")
+                        }
+
+                        if(loginUiState?.isLoading == true){
+                            CircularProgressIndicator()
+                        }
+
+                        LaunchedEffect(key1 = loginViewModel.hasUser){
+                            if(loginViewModel.hasUser){
+                                onLoginInButtonClicked.invoke()
+                            }
+                        }
+
                     }
                 }
 
@@ -302,11 +328,5 @@ fun ThreeTextWithCard(
     }
 
 
-}
-
-@Preview
-@Composable
-fun ThreeTextWithCardPreview() {
-    ThreeTextWithCard(onLoginInButtonClicked = {})
 }
 

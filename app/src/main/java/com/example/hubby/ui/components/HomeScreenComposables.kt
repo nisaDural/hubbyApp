@@ -8,8 +8,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.CornerSize
 import androidx.compose.material.icons.Icons
@@ -17,7 +15,6 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Favorite
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
-import androidx.compose.material3.Card
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ScrollableTabRow
@@ -35,8 +32,6 @@ import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.unit.dp
-import androidx.lifecycle.viewmodel.compose.viewModel
-import com.example.hubby.data.model.UserViewModel
 
 
 @Composable
@@ -142,21 +137,5 @@ fun TabView() {
     }
 }
 
-@Composable
-fun Workshops(dataViewModel: UserViewModel = viewModel()) {
-    val getData = dataViewModel.state.value
-    Text(text = "Workshops You May Like")
-
-    val itemList = listOf("Item1", "Item2")
-    LazyRow {
-        items(itemList) { item ->
-            Card() {
-                Text(text = getData.id)
-                Text(text = getData.fullname)
-                Text(text = getData.mail)
-            }
-        }
-    }
-}
 
 data class TabItem(val title: String, val icon: ImageVector)

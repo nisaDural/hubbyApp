@@ -3,13 +3,16 @@ package com.example.hubby.ui.navigation
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.hubby.data.model.AddressViewModel
+import com.example.hubby.data.model.LoginViewModel
+import com.example.hubby.data.model.ProductViewModel
 import com.example.hubby.data.model.UserViewModel
+import com.example.hubby.ui.ProductsAdder
 import com.example.hubby.ui.screens.ShopScreen
 import com.example.hubby.ui.screens.home.HomeScreen
 import com.example.hubby.ui.screens.profile.MyOrders
@@ -24,8 +27,11 @@ import com.nehir.hubbylogin.ui.Screen.SignupScreen
 
 @Composable
 fun HobbyApp(
-    viewModel: UserViewModel = viewModel(),
-    navController: NavHostController = rememberNavController()
+    navController: NavHostController = rememberNavController(),
+    loginViewModel: LoginViewModel,
+    userViewModel: UserViewModel,
+    productViewModel: ProductViewModel,
+    addressViewModel: AddressViewModel
 ) {
 
     // Get current back stack entry
@@ -35,7 +41,6 @@ fun HobbyApp(
         backStackEntry?.destination?.route ?: Screens.Login.name
     )
 
-    // val uiState by viewModel.uiState.collectAsState()
 
     NavHost(
         navController = navController,
@@ -44,6 +49,7 @@ fun HobbyApp(
     ) {
         composable(route = Screens.Home.name) {
             HomeScreen(
+                productViewModel,
                 navController
             )
         }
@@ -52,6 +58,8 @@ fun HobbyApp(
         }
         composable(route = Screens.FooterProfile.name) {
             ProfileScreen(
+                userViewModel,
+                loginViewModel,
                 navController,
                 currentScreen,
                 onUserProfileClicked = { navController.navigate(Screens.UserProfile.name) },
@@ -62,7 +70,7 @@ fun HobbyApp(
             )
         }
         composable(route = Screens.UserProfile.name) {
-            UserProfile()
+            UserProfile(userViewModel)
         }
         composable(route = Screens.MyOrders.name) {
             MyOrders(
@@ -72,6 +80,7 @@ fun HobbyApp(
         }
         composable(route = Screens.ShippingAddresses.name) {
             ShippingAddresses(
+                addressViewModel,
                 currentScreen,
                 navController
             )
@@ -93,6 +102,7 @@ fun HobbyApp(
         }
         composable(route = Screens.Setting.name) {
             Settings(
+                userViewModel,
                 currentScreen,
                 navController
             )
@@ -100,15 +110,34 @@ fun HobbyApp(
         composable(route = Screens.Login.name) {
             LoginScreen(
                 onLoginInButtonClicked = {
-                    navController.navigate(Screens.Home.name)
+                    navController.navigate(Screens.Home.name) {
+                        launchSingleTop = true
+                        popUpTo(route = Screens.Home.name) {
+                            inclusive = true
+                        }
+                    }
                 },
                 onSignUpButtonClicked = {
-                    navController.navigate(Screens.SignUp.name)
-                }
+                    navController.navigate(Screens.SignUp.name) {
+                        launchSingleTop = true
+                        popUpTo(Screens.Login.name) {
+                            inclusive = true
+                        }
+                    }
+                },
+                loginViewModel = loginViewModel
             )
         }
         composable(route = Screens.SignUp.name) {
-            SignupScreen()
+            SignupScreen(
+                loginViewModel = loginViewModel,
+                navController = navController
+            )
+        }
+        composable(route = Screens.Products.name) {
+            ProductsAdder(
+                productViewModel
+            )
         }
     }
 }

@@ -1,12 +1,13 @@
-@file:OptIn(ExperimentalMaterial3Api::class)
+@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
 
 package com.example.hubby.ui.screens.profile
 
-import androidx.compose.foundation.Image
+import android.widget.Toast
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -16,8 +17,10 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
-import androidx.compose.material.icons.filled.Menu
+import androidx.compose.material.icons.filled.KeyboardArrowRight
+import androidx.compose.material.icons.sharp.KeyboardArrowRight
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
@@ -28,18 +31,28 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
-import com.example.hubby.R
+import coil.compose.AsyncImage
+import com.example.hubby.data.model.LoginViewModel
+import com.example.hubby.data.model.UserViewModel
+import com.example.hubby.repository.Response
 import com.example.hubby.ui.components.HobbyNavigationBar
 import com.example.hubby.ui.components.TitleAppBar
 import com.example.hubby.ui.navigation.Screens
+import com.example.hubby.ui.theme.poppinsFontFamily
 
 
 @Composable
 fun ProfileScreen(
+    userViewModel: UserViewModel,
+    loginViewModel: LoginViewModel,
     navController: NavHostController,
     currentScreen: Screens,
     onUserProfileClicked: () -> Unit = {},
@@ -48,277 +61,179 @@ fun ProfileScreen(
     onMyReviewsClicked: () -> Unit = {},
     onSettingClicked: () -> Unit = {},
 ) {
-    Scaffold(
-        topBar = {
-            TitleAppBar(
-                currentScreen = currentScreen,
-                canNavigateBack = navController.previousBackStackEntry != null,
-                navigateUp = { navController.navigateUp() },
-                endIcon = Icons.Filled.ExitToApp,
-                onEndIconClick = {}
-            )
-        },
-        bottomBar = {
-            HobbyNavigationBar(navController = navController)
+
+    userViewModel.getUserInfo()
+
+    when (val response = userViewModel.getUserData.value) {
+        is Response.Loading -> {
+            CircularProgressIndicator()
         }
-    ) {
-        Column(
-            modifier = Modifier.padding(it)
-        ) {
-            Row(
-                horizontalArrangement = Arrangement.SpaceBetween,
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                Image(
-                    painter = painterResource(id = R.drawable.ic_launcher_background),
-                    contentDescription = null,
-                    modifier = Modifier.clip(CircleShape)
-                )
 
-                Column(
-                    verticalArrangement = Arrangement.Center,
-                    horizontalAlignment = Alignment.Start,
-                    modifier = Modifier.padding(vertical = 30.dp)
-                ) {
-                    Text(text = "Hailey Smith")
-                    Text(text = "hailey123@gmail.com")
-                }
-                Icon(
-                    imageVector = Icons.Filled.Menu,
-                    tint = Color.Black,
-                    contentDescription = "Search Icon",
-                    modifier = Modifier
-                        .clickable {
-                            onUserProfileClicked()
-                        }
-                        .padding(vertical = 30.dp, horizontal = 8.dp)
-                        .size(30.dp)
-                )
-            }
-            Column(
-                modifier = Modifier
-                    .padding(vertical = 15.dp)
-                    .fillMaxHeight(),
-                verticalArrangement = Arrangement.SpaceAround
-            ) {
-                ElevatedCard(
-                    elevation = CardDefaults.cardElevation(
-                        defaultElevation = 6.dp
-                    ),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color.White
-                    ),
-                    shape = RoundedCornerShape(0),
-                    modifier = Modifier
-                        .height(80.dp)
-                        .fillMaxWidth()
-                ) {
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier.fillMaxWidth()
+        is Response.Success -> {
+            if (response.data != null) {
+                val obj = response.data
+                Scaffold(topBar = {
+                    TitleAppBar(currentScreen = currentScreen,
+                        canNavigateBack = navController.previousBackStackEntry != null,
+                        navigateUp = { navController.navigateUp() },
+                        endIcon = Icons.Filled.ExitToApp,
+                        onEndIconClick = {
+                            loginViewModel.signOut()
+                            navController.navigate(Screens.Login.name)
+                        })
+                }, bottomBar = {
+                    HobbyNavigationBar(navController = navController)
+                }) {
+                    Column(
+                        modifier = Modifier.padding(it)
                     ) {
-                        Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 18.dp)) {
-                            Text(
-                                text = "Orders",
+                        Row(
+                            horizontalArrangement = Arrangement.SpaceBetween,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = 20.dp)
+                        ) {
+                            AsyncImage(
+                                model = obj.imageUrl,
+                                contentDescription = "",
                                 modifier = Modifier
-                                    .padding(),
-                                textAlign = TextAlign.Center,
+                                    .clip(CircleShape)
+                                    .size(82.dp),
+                                contentScale = ContentScale.FillWidth// Adjust the size as needed
                             )
-                            Text(
-                                text = "Already have 10 orders / You ordered 5",
+
+                            Column(
+                                verticalArrangement = Arrangement.Top,
+                                horizontalAlignment = Alignment.Start,
+                                modifier = Modifier.padding(vertical = 30.dp)
+                            ) {
+                                Text(
+                                    text = obj.name, style = TextStyle(
+                                        fontSize = 20.sp,
+                                        fontFamily = poppinsFontFamily,
+                                        fontWeight = FontWeight(600),
+                                        color = Color(0xFF303030),
+                                    )
+                                )
+                                Text(
+                                    text = obj.email, style = TextStyle(
+                                        fontSize = 16.sp,
+                                        fontFamily = poppinsFontFamily,
+                                        fontWeight = FontWeight(400),
+                                        color = Color(0xFF808080),
+                                    )
+                                )
+                            }
+                            Icon(imageVector = Icons.Filled.KeyboardArrowRight,
+                                tint = Color.Black,
+                                contentDescription = "Search Icon",
                                 modifier = Modifier
-                                    .padding(),
-                                textAlign = TextAlign.Center,
+                                    .clickable {
+                                        onUserProfileClicked()
+                                    }
+                                    .padding(vertical = 30.dp, horizontal = 8.dp)
+                                    .size(30.dp))
+                        }
+                        Column(
+                            modifier = Modifier
+                                .padding(vertical = 15.dp, horizontal = 20.dp)
+                                .fillMaxHeight(),
+                        ) {
+                            ProfileCard(
+                                title = "Orders",
+                                description = "Already have 10 orders / You ordered 5",
+                                onClick = onMyOrdersClicked
+                            )
+                            Spacer(modifier = Modifier.padding(bottom = 20.dp))
+                            ProfileCard(
+                                title = "Shipping Addresses",
+                                description = "03 Addresses",
+                                onClick = onShippingAddressesClicked
+                            )
+                            Spacer(modifier = Modifier.padding(bottom = 20.dp))
+                            ProfileCard(title = "Payment Method",
+                                description = "You have 2 cards",
+                                onClick = {
+                                    navController.navigate(Screens.Products.name)
+                                })
+                            Spacer(modifier = Modifier.padding(bottom = 20.dp))
+                            ProfileCard(
+                                title = "My Reviews",
+                                description = "Reviews for 5 items",
+                                onClick = onMyReviewsClicked
+                            )
+                            Spacer(modifier = Modifier.padding(bottom = 20.dp))
+                            ProfileCard(
+                                title = "Settings",
+                                description = "Notifications, Password",
+                                onClick = onSettingClicked
                             )
                         }
-                        Icon(
-                            imageVector = Icons.Filled.Menu,
-                            tint = Color.Black,
-                            contentDescription = "Search Icon",
-                            modifier = Modifier
-                                .clickable {
-                                    onMyOrdersClicked()
-                                }
-                                .padding(vertical = 28.dp, horizontal = 10.dp)
-                                .size(30.dp)
-                        )
-                    }
-                }
-                ElevatedCard(
-                    elevation = CardDefaults.cardElevation(
-                        defaultElevation = 6.dp
-                    ),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color.White
-                    ),
-                    shape = RoundedCornerShape(0),
-                    modifier = Modifier
-                        .height(80.dp)
-                        .fillMaxWidth()
-                ) {
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 18.dp)) {
-                            Text(
-                                text = "Shipping Addresses",
-                                modifier = Modifier
-                                    .padding(),
-                                textAlign = TextAlign.Center,
-                            )
-                            Text(
-                                text = "03 Addresses",
-                                modifier = Modifier
-                                    .padding(),
-                                textAlign = TextAlign.Center,
-                            )
-                        }
-                        Icon(
-                            imageVector = Icons.Filled.Menu,
-                            tint = Color.Black,
-                            contentDescription = "Search Icon",
-                            modifier = Modifier
-                                .clickable {
-                                    onShippingAddressesClicked()
-                                }
-                                .padding(vertical = 28.dp, horizontal = 10.dp)
-                                .size(30.dp)
-                        )
-                    }
-                }
-                ElevatedCard(
-                    elevation = CardDefaults.cardElevation(
-                        defaultElevation = 6.dp
-                    ),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color.White
-                    ),
-                    shape = RoundedCornerShape(0),
-                    modifier = Modifier
-                        .height(80.dp)
-                        .fillMaxWidth()
-                ) {
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 18.dp)) {
-                            Text(
-                                text = "Payment Method",
-                                modifier = Modifier
-                                    .padding(),
-                                textAlign = TextAlign.Center,
-                            )
-                            Text(
-                                text = "You have 2 cards",
-                                modifier = Modifier
-                                    .padding(),
-                                textAlign = TextAlign.Center,
-                            )
-                        }
-                        Icon(
-                            imageVector = Icons.Filled.Menu,
-                            tint = Color.Black,
-                            contentDescription = "Search Icon",
-                            modifier = Modifier
-                                .clickable {
-                                }
-                                .padding(vertical = 28.dp, horizontal = 10.dp)
-                                .size(30.dp)
-                        )
-                    }
-                }
-                ElevatedCard(
-                    elevation = CardDefaults.cardElevation(
-                        defaultElevation = 6.dp
-                    ),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color.White
-                    ),
-                    shape = RoundedCornerShape(0),
-                    modifier = Modifier
-                        .height(80.dp)
-                        .fillMaxWidth()
-                ) {
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 18.dp)) {
-                            Text(
-                                text = "My reviews",
-                                modifier = Modifier
-                                    .padding(),
-                                textAlign = TextAlign.Center,
-                            )
-                            Text(
-                                text = "Reviews for 5 items",
-                                modifier = Modifier
-                                    .padding(),
-                                textAlign = TextAlign.Center,
-                            )
-                        }
-                        Icon(
-                            imageVector = Icons.Filled.Menu,
-                            tint = Color.Black,
-                            contentDescription = "Search Icon",
-                            modifier = Modifier
-                                .clickable {
-                                    onMyReviewsClicked()
-                                }
-                                .padding(vertical = 28.dp, horizontal = 10.dp)
-                                .size(30.dp)
-                        )
-                    }
-                }
-                ElevatedCard(
-                    elevation = CardDefaults.cardElevation(
-                        defaultElevation = 6.dp
-                    ),
-                    colors = CardDefaults.cardColors(
-                        containerColor = Color.White
-                    ),
-                    shape = RoundedCornerShape(0),
-                    modifier = Modifier
-                        .height(80.dp)
-                        .fillMaxWidth()
-                ) {
-                    Row(
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        modifier = Modifier.fillMaxWidth()
-                    ) {
-                        Column(modifier = Modifier.padding(horizontal = 20.dp, vertical = 18.dp)) {
-                            Text(
-                                text = "Setting",
-                                modifier = Modifier
-                                    .padding(),
-                                textAlign = TextAlign.Center,
-                            )
-                            Text(
-                                text = "Notifications, Password",
-                                modifier = Modifier
-                                    .padding(),
-                                textAlign = TextAlign.Center,
-                            )
-                        }
-                        Icon(
-                            imageVector = Icons.Filled.Menu,
-                            tint = Color.Black,
-                            contentDescription = "Search Icon",
-                            modifier = Modifier
-                                .clickable {
-                                    onSettingClicked()
-                                }
-                                .padding(vertical = 28.dp, horizontal = 10.dp)
-                                .size(30.dp)
-                        )
                     }
                 }
             }
+        }
 
-
+        is Response.Error -> {
+            Toast.makeText(
+                LocalContext.current, response.message, Toast.LENGTH_SHORT
+            ).show()
         }
     }
+}
 
+@Composable
+fun ProfileCard(
+    title: String, description: String, onClick: () -> Unit
+) {
+    ElevatedCard(
+        elevation = CardDefaults.cardElevation(defaultElevation = 20.dp),
+        colors = CardDefaults.cardColors(containerColor = Color.White),
+        shape = RoundedCornerShape(8.dp),
+        modifier = Modifier
+            .height(90.dp)
+            .fillMaxWidth()
+            .clickable {
+                onClick()
+            }
+    ) {
+        Row(
+            horizontalArrangement = Arrangement.SpaceBetween, modifier = Modifier.fillMaxWidth()
+        ) {
+            Column(
+                modifier = Modifier.padding(horizontal = 20.dp, vertical = 18.dp)
+            ) {
+                Text(
+                    text = title,
+                    modifier = Modifier.padding(),
+                    textAlign = TextAlign.Center,
+                    style = TextStyle(
+                        fontSize = 18.sp,
+                        fontFamily = poppinsFontFamily,
+                        fontWeight = FontWeight(500),
+                        color = Color(0xFF242424),
+                    )
+                )
+                Text(
+                    text = description,
+                    modifier = Modifier.padding(),
+                    textAlign = TextAlign.Center,
+                    style = TextStyle(
+                        fontSize = 14.sp,
+                        fontFamily = poppinsFontFamily,
+                        fontWeight = FontWeight(400),
+                        color = Color(0xFF808080),
+                    )
+                )
+            }
+            Icon(
+                imageVector = Icons.Sharp.KeyboardArrowRight,
+                tint = Color.Black,
+                contentDescription = "Menu Icon",
+                modifier = Modifier
+                    .padding(vertical = 28.dp, horizontal = 10.dp)
+                    .size(30.dp)
+            )
+        }
+    }
 }

@@ -14,5 +14,6 @@ enum class Screens(@StringRes val title: Int? = null) {
     ReviewsComment(title = R.string.reviews_comment),
     Setting(title = R.string.settings),
     Login,
-    SignUp
+    SignUp,
+    Products
 }
