@@ -1,6 +1,6 @@
 /*buildscript {
-    dependencies {
-        classpath("com.google.gms:google-services:4.4.0")
+    ext {
+        compose_ui_version = '1.4.0-beta01'
     }
 }*/
 // Top-level build file where you can add configuration options common to all sub-projects/modules.

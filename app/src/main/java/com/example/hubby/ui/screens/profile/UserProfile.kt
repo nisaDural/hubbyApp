@@ -25,12 +25,22 @@ import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DrawerValue
 import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.ModalDrawerSheet
+import androidx.compose.material3.ModalNavigationDrawer
+import androidx.compose.material3.NavigationDrawerItem
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -45,6 +55,7 @@ import com.example.hubby.R
 import com.example.hubby.data.model.UserViewModel
 import com.example.hubby.repository.Response
 import com.example.hubby.ui.components.HobbyAppBar
+import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,6 +65,11 @@ fun UserProfile(
 
     userViewModel.getUserInfo()
 
+    val scope = rememberCoroutineScope()
+    val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
+    val menuList = listOf("Categories", "Contact Us")
+    var selectedItem by remember { mutableStateOf(-1) }
+
     when (val response = userViewModel.getUserData.value) {
         is Response.Loading -> {
             CircularProgressIndicator()
@@ -62,148 +78,169 @@ fun UserProfile(
         is Response.Success -> {
             if (response.data != null) {
                 val obj = response.data
-                Scaffold(
-                    topBar = {
-                        HobbyAppBar()
-                    },
-                ) {
-                    Column(
-                        modifier = Modifier
-                            .padding(it)
-                            .fillMaxSize()
-                            .statusBarsPadding()
-                            .verticalScroll(rememberScrollState())
-                            .safeDrawingPadding()
-                            .background(color = Color.White)
-                    ) {
-                        Row(
-                            modifier = Modifier
-                                .padding(horizontal = 24.dp)
-                                .fillMaxWidth(),
-                            horizontalArrangement = Arrangement.SpaceBetween,
-                        ) {
-                            Column(verticalArrangement = Arrangement.Center) {
-                                Row {
-                                    Text(text = obj.name)
-                                    Icon(imageVector = Icons.Filled.Search,
-                                        tint = Color.Black,
-                                        contentDescription = "Search Icon",
-                                        modifier = Modifier
-                                            .clickable {
-
-                                            }
-                                            .padding(horizontal = 8.dp)
-                                            .size(24.dp))
-
-                                }
-                                Text(text = obj.title)
+                ModalNavigationDrawer(
+                    drawerContent = {
+                        ModalDrawerSheet {
+                            menuList.forEachIndexed { index, data ->
+                                NavigationDrawerItem(
+                                    label = { Text(text = data.toString()) },
+                                    selected = selectedItem == index,
+                                    onClick = { selectedItem = index })
                             }
-                            AsyncImage(
-                                model = obj.imageUrl,
-                                contentDescription = "",
-                                contentScale = ContentScale.FillWidth,
-                                modifier = Modifier
-                                    .clip(CircleShape)
-                                    .size(55.dp)
-                            )
                         }
-                        Row(modifier = Modifier.padding(horizontal = 24.dp)) {
-                            UserCategories(categories = obj.categories)
-                        }
-                        Spacer(modifier = Modifier.height(16.dp))
-                        Work()
-                        //Spacer(modifier = Modifier.height(20.dp))
-                        ElevatedCard(
+                    },
+                    drawerState = drawerState
+                ) {
+                    Scaffold(
+                        topBar = {
+                            HobbyAppBar {
+                                scope.launch {
+                                    drawerState.open()
+                                }
+                            }
+                        },
+                    ) {
+                        Column(
                             modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(top = 30.dp),
-                            colors = CardDefaults.elevatedCardColors(Color.White),
-                            elevation = CardDefaults.cardElevation(
-                                defaultElevation = 20.dp
-                            ),
-                            shape = RoundedCornerShape(24.dp)
+                                .padding(it)
+                                .fillMaxSize()
+                                .statusBarsPadding()
+                                .verticalScroll(rememberScrollState())
+                                .safeDrawingPadding()
+                                .background(color = Color.White)
                         ) {
-                            Spacer(modifier = Modifier.height(16.dp))
-                            Box(
-                                Modifier
-                                    .width(120.dp)
-                                    .height(3.dp)
-                                    .background(color = Color(0x3C6E81A0))
-                                    .align(Alignment.CenterHorizontally)
-                            )
-                            Spacer(modifier = Modifier.height(16.dp))
-                            Text(
-                                text = "Wishlist",
-                                modifier = Modifier.padding(horizontal = 24.dp, vertical = 10.dp)
-                            )
                             Row(
                                 modifier = Modifier
-                                    .padding(horizontal = 24.dp, vertical = 25.dp)
+                                    .padding(horizontal = 24.dp)
                                     .fillMaxWidth(),
-                                horizontalArrangement = Arrangement.SpaceBetween
+                                horizontalArrangement = Arrangement.SpaceBetween,
                             ) {
-                                Image(
-                                    painter = painterResource(id = R.drawable.ic_launcher_background),
-                                    contentDescription = "image description",
+                                Column(verticalArrangement = Arrangement.Center) {
+                                    Row {
+                                        Text(text = obj.name)
+                                        Icon(imageVector = Icons.Filled.Search,
+                                            tint = Color.Black,
+                                            contentDescription = "Search Icon",
+                                            modifier = Modifier
+                                                .clickable {
+
+                                                }
+                                                .padding(horizontal = 8.dp)
+                                                .size(24.dp))
+
+                                    }
+                                    Text(text = obj.title)
+                                }
+                                AsyncImage(
+                                    model = obj.imageUrl,
+                                    contentDescription = "",
+                                    contentScale = ContentScale.FillWidth,
                                     modifier = Modifier
-                                        .clip(
-                                            RoundedCornerShape(16.dp)
-                                        )
-                                        .width(60.dp)
-                                        .height(60.dp),
-                                    contentScale = ContentScale.FillBounds
+                                        .clip(CircleShape)
+                                        .size(55.dp)
                                 )
-                                Image(
-                                    painter = painterResource(id = R.drawable.ic_launcher_background),
-                                    contentDescription = "image description",
-                                    modifier = Modifier
-                                        .clip(
-                                            RoundedCornerShape(16.dp)
-                                        )
-                                        .width(60.dp)
-                                        .height(60.dp),
-                                    contentScale = ContentScale.FillBounds
-                                )
-                                Image(
-                                    painter = painterResource(id = R.drawable.ic_launcher_background),
-                                    contentDescription = "image description",
-                                    modifier = Modifier
-                                        .clip(
-                                            RoundedCornerShape(16.dp)
-                                        )
-                                        .width(60.dp)
-                                        .height(60.dp),
-                                    contentScale = ContentScale.FillBounds
-                                )
-                                Image(
-                                    painter = painterResource(id = R.drawable.ic_launcher_background),
-                                    contentDescription = "image description",
-                                    modifier = Modifier
-                                        .clip(
-                                            RoundedCornerShape(16.dp)
-                                        )
-                                        .width(60.dp)
-                                        .height(60.dp),
-                                    contentScale = ContentScale.FillBounds
-                                )
+                            }
+                            Row(modifier = Modifier.padding(horizontal = 24.dp)) {
+                                UserCategories(categories = obj.categories)
+                            }
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Work()
+                            //Spacer(modifier = Modifier.height(20.dp))
+                            ElevatedCard(
+                                modifier = Modifier
+                                    .fillMaxWidth()
+                                    .padding(top = 30.dp),
+                                colors = CardDefaults.elevatedCardColors(Color.White),
+                                elevation = CardDefaults.cardElevation(
+                                    defaultElevation = 20.dp
+                                ),
+                                shape = RoundedCornerShape(24.dp)
+                            ) {
+                                Spacer(modifier = Modifier.height(16.dp))
                                 Box(
-                                    contentAlignment = Alignment.Center, modifier = Modifier
-                                        .clip(
-                                            RoundedCornerShape(16.dp)
-                                        )
-                                        .width(60.dp)
-                                        .height(60.dp)
-                                        .background(
-                                            Brush.linearGradient(
-                                                listOf(
-                                                    Color(0xFF7F85A2), Color(0xFFDEEAF5)
+                                    Modifier
+                                        .width(120.dp)
+                                        .height(3.dp)
+                                        .background(color = Color(0x3C6E81A0))
+                                        .align(Alignment.CenterHorizontally)
+                                )
+                                Spacer(modifier = Modifier.height(16.dp))
+                                Text(
+                                    text = "Wishlist",
+                                    modifier = Modifier.padding(
+                                        horizontal = 24.dp,
+                                        vertical = 10.dp
+                                    )
+                                )
+                                Row(
+                                    modifier = Modifier
+                                        .padding(horizontal = 24.dp, vertical = 25.dp)
+                                        .fillMaxWidth(),
+                                    horizontalArrangement = Arrangement.SpaceBetween
+                                ) {
+                                    Image(
+                                        painter = painterResource(id = R.drawable.ic_launcher_background),
+                                        contentDescription = "image description",
+                                        modifier = Modifier
+                                            .clip(
+                                                RoundedCornerShape(16.dp)
+                                            )
+                                            .width(60.dp)
+                                            .height(60.dp),
+                                        contentScale = ContentScale.FillBounds
+                                    )
+                                    Image(
+                                        painter = painterResource(id = R.drawable.ic_launcher_background),
+                                        contentDescription = "image description",
+                                        modifier = Modifier
+                                            .clip(
+                                                RoundedCornerShape(16.dp)
+                                            )
+                                            .width(60.dp)
+                                            .height(60.dp),
+                                        contentScale = ContentScale.FillBounds
+                                    )
+                                    Image(
+                                        painter = painterResource(id = R.drawable.ic_launcher_background),
+                                        contentDescription = "image description",
+                                        modifier = Modifier
+                                            .clip(
+                                                RoundedCornerShape(16.dp)
+                                            )
+                                            .width(60.dp)
+                                            .height(60.dp),
+                                        contentScale = ContentScale.FillBounds
+                                    )
+                                    Image(
+                                        painter = painterResource(id = R.drawable.ic_launcher_background),
+                                        contentDescription = "image description",
+                                        modifier = Modifier
+                                            .clip(
+                                                RoundedCornerShape(16.dp)
+                                            )
+                                            .width(60.dp)
+                                            .height(60.dp),
+                                        contentScale = ContentScale.FillBounds
+                                    )
+                                    Box(
+                                        contentAlignment = Alignment.Center, modifier = Modifier
+                                            .clip(
+                                                RoundedCornerShape(16.dp)
+                                            )
+                                            .width(60.dp)
+                                            .height(60.dp)
+                                            .background(
+                                                Brush.linearGradient(
+                                                    listOf(
+                                                        Color(0xFF7F85A2), Color(0xFFDEEAF5)
+                                                    )
                                                 )
                                             )
-                                        )
-                                ) {
-                                    Text(text = "+7")
+                                    ) {
+                                        Text(text = "+7")
+                                    }
+                                    Spacer(modifier = Modifier.height(50.dp))
                                 }
-                                Spacer(modifier = Modifier.height(50.dp))
                             }
                         }
                     }

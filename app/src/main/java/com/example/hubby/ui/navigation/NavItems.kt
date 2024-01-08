@@ -15,6 +15,11 @@ val listOfNavItems = listOf(
         route = Screens.Home.name
     ),
     NavItem(
+        label = "Workshop",
+        icon = R.drawable.play,
+        route = Screens.Workshop.name
+    ),
+    NavItem(
         label = "Shop",
         icon = R.drawable.bag_icon,
         route = Screens.Shop.name

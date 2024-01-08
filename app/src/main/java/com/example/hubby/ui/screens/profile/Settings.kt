@@ -59,7 +59,8 @@ fun Settings(
             val obj = response.data
             Scaffold(
                 topBar = {
-                    TitleAppBar(currentScreen = currentScreen,
+                    TitleAppBar(
+                        currentScreen = currentScreen,
                         canNavigateBack = navController.previousBackStackEntry != null,
                         navigateUp = { navController.navigateUp() })
                 },
