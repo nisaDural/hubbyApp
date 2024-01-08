@@ -2,6 +2,7 @@
 
 package com.example.hubby.ui.components
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
@@ -28,7 +29,7 @@ fun TitleAppBar(
     canNavigateBack: Boolean,
     navigateUp: () -> Unit,
     endIcon: ImageVector? = null,
-    onEndIconClick: (() -> Unit)? = null
+    onEndIconClick: (() -> Unit)? = {}
 ) {
     CenterAlignedTopAppBar(
         navigationIcon = {
@@ -53,15 +54,16 @@ fun TitleAppBar(
         },
         actions = {
             if (endIcon != null) {
-                IconButton(onClick = onEndIconClick ?: {}) {
                     Icon(
                         imageVector = endIcon,
                         contentDescription = "",
                         modifier = Modifier
                             .padding(8.dp)
                             .size(24.dp)
+                            .clickable {
+                                onEndIconClick?.invoke()
+                            }
                     )
-                }
             }
         },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(

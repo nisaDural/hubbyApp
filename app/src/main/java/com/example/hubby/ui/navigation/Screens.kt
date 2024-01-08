@@ -6,6 +6,7 @@ import com.example.hubby.R
 enum class Screens(@StringRes val title: Int? = null) {
     Home,
     Shop,
+    Workshop,
     FooterProfile(title = R.string.profile),
     UserProfile,
     MyOrders(title = R.string.my_orders),
@@ -15,5 +16,7 @@ enum class Screens(@StringRes val title: Int? = null) {
     Setting(title = R.string.settings),
     Login,
     SignUp,
-    Products
+    Products,
+    Categories,
+    FilterProducts
 }

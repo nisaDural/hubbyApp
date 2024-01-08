@@ -43,7 +43,6 @@ class UserRepository() {
         awaitClose {
             snapShotListener.remove()
         }
-
     }
 
     fun setUserDetails(
@@ -52,26 +51,22 @@ class UserRepository() {
     ): Flow<Response<Boolean>> = flow {
         operationSuccessful = false
         try {
-            val userObj = mutableMapOf<String,String>()
+            val userObj = mutableMapOf<String, String>()
             userObj["fullName"] = name
             userRef.document(userId).update(userObj as Map<String, Any>)
                 .addOnSuccessListener {
                     operationSuccessful = true
                 }.await()
-            if (operationSuccessful){
+            if (operationSuccessful) {
                 emit(Response.Success(operationSuccessful))
-            }
-            else{
+            } else {
                 emit(Response.Error("Edit Does Not Succed"))
             }
 
-        }
-        catch (e: Exception){
-            Response.Error(e.localizedMessage?:"An Unexpected Error")
+        } catch (e: Exception) {
+            Response.Error(e.localizedMessage ?: "An Unexpected Error")
         }
     }
-
-
 
 
 }
@@ -86,4 +81,10 @@ sealed class Response<out T> {
     data class Error(
         val message: String
     ) : Response<Nothing>()
+
+    fun <R> map(transform: (T) -> R): Response<R> = when (this) {
+        is Loading -> Loading
+        is Success -> Success(transform(data))
+        is Error -> Error(message)
+    }
 }

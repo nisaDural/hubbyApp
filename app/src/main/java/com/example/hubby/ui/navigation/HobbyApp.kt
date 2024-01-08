@@ -1,5 +1,6 @@
 package com.example.hubby.ui.navigation
 
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
@@ -8,30 +9,34 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.example.hubby.Categories
 import com.example.hubby.data.model.AddressViewModel
 import com.example.hubby.data.model.LoginViewModel
 import com.example.hubby.data.model.ProductViewModel
 import com.example.hubby.data.model.UserViewModel
 import com.example.hubby.ui.ProductsAdder
+import com.example.hubby.ui.screens.FilterProducts
 import com.example.hubby.ui.screens.ShopScreen
 import com.example.hubby.ui.screens.home.HomeScreen
+import com.example.hubby.ui.screens.profile.FooterProfileScreen
 import com.example.hubby.ui.screens.profile.MyOrders
-import com.example.hubby.ui.screens.profile.ProfileScreen
 import com.example.hubby.ui.screens.profile.ReviewList
 import com.example.hubby.ui.screens.profile.ReviewsComment
 import com.example.hubby.ui.screens.profile.Settings
 import com.example.hubby.ui.screens.profile.ShippingAddresses
 import com.example.hubby.ui.screens.profile.UserProfile
+import com.example.hubby.ui.screens.workshop.WorkshopScreen
 import com.nehir.hubbylogin.ui.Screen.LoginScreen
 import com.nehir.hubbylogin.ui.Screen.SignupScreen
 
+@ExperimentalMaterial3Api
 @Composable
 fun HobbyApp(
     navController: NavHostController = rememberNavController(),
     loginViewModel: LoginViewModel,
     userViewModel: UserViewModel,
     productViewModel: ProductViewModel,
-    addressViewModel: AddressViewModel
+    addressViewModel: AddressViewModel,
 ) {
 
     // Get current back stack entry
@@ -42,22 +47,26 @@ fun HobbyApp(
     )
 
 
+
     NavHost(
         navController = navController,
         startDestination = Screens.Login.name,
-        modifier = Modifier
+        modifier = Modifier,
     ) {
+
         composable(route = Screens.Home.name) {
             HomeScreen(
-                productViewModel,
                 navController
             )
         }
         composable(route = Screens.Shop.name) {
             ShopScreen(navController)
         }
+        composable(route = Screens.Workshop.name) {
+            WorkshopScreen(navController)
+        }
         composable(route = Screens.FooterProfile.name) {
-            ProfileScreen(
+            FooterProfileScreen(
                 userViewModel,
                 loginViewModel,
                 navController,
@@ -138,6 +147,12 @@ fun HobbyApp(
             ProductsAdder(
                 productViewModel
             )
+        }
+        composable(route = Screens.Categories.name) {
+            Categories(navController)
+        }
+        composable(route = Screens.FilterProducts.name) {
+            FilterProducts(navController)
         }
     }
 }

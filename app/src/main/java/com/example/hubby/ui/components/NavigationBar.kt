@@ -7,6 +7,7 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -24,19 +25,25 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
 import com.example.hubby.ui.navigation.listOfNavItems
+import com.example.hubby.ui.theme.poppinsFontFamily
 
 @Composable
 fun HobbyNavigationBar(
     navController: NavHostController,
 ) {
     NavigationBar(
-        containerColor = Color.White, modifier = Modifier.fillMaxWidth()
+        containerColor = Color.White, modifier = Modifier
+            .fillMaxWidth()
+            .padding(horizontal = 20.dp)
 
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
@@ -61,8 +68,8 @@ fun HobbyNavigationBar(
                     if (navItem.route == currentDestination?.route) {
                         Box(
                             modifier = Modifier
-                                .height(48.dp)
-                                .width(120.dp)
+                                .height(53.dp)
+                                .width(130.dp)
                                 .clip(RoundedCornerShape(18.dp))
                                 .background(
                                     Brush.linearGradient(
@@ -82,13 +89,23 @@ fun HobbyNavigationBar(
                                     painter = painterResource(id = navItem.icon),
                                     contentDescription = null,
                                     tint = Color.White,
-                                    modifier = Modifier.shadow(
-                                        elevation = 0.dp, shape = CircleShape
-                                    )
+                                    modifier = Modifier
+                                        .shadow(
+                                            elevation = 0.dp, shape = CircleShape
+                                        )
+                                        .size(20.dp)
                                 )
                                 Text(
                                     text = navItem.label,
-                                    modifier = Modifier.padding(start = 8.dp),
+                                    style = TextStyle(
+                                        fontSize = 12.sp,
+                                        fontFamily = poppinsFontFamily,
+                                        fontWeight = FontWeight(500),
+                                        color = Color(0xFFFFFFFF),
+                                    ),
+                                    modifier = Modifier
+                                        .padding(start = 8.dp)
+                                        .fillMaxWidth(),
                                     color = Color.White
                                 )
                             }
