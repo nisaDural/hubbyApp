@@ -47,7 +47,6 @@ fun HobbyApp(
     )
 
 
-
     NavHost(
         navController = navController,
         startDestination = Screens.Login.name,
@@ -149,10 +148,10 @@ fun HobbyApp(
             )
         }
         composable(route = Screens.Categories.name) {
-            Categories(navController)
+            Categories(navController, productViewModel)
         }
         composable(route = Screens.FilterProducts.name) {
-            FilterProducts(navController)
+            FilterProducts(navController, productViewModel)
         }
     }
 }
