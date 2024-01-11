@@ -21,6 +21,13 @@ class ProductViewModel(
     private val _userProductData = mutableStateOf<Response<List<Product>>>(Response.Loading)
     val userProductData: State<Response<List<Product>>> = _userProductData
 
+    private val _selectedCategory = mutableStateOf<String?>(null)
+    val selectedCategory: State<String?> = _selectedCategory
+
+    fun setSelectedCategory(category: String) {
+        _selectedCategory.value = category
+    }
+
     fun getAllProducts() {
         viewModelScope.launch {
             repository.getAllProducts().collect {

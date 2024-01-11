@@ -30,7 +30,7 @@ import com.example.hubby.ui.theme.poppinsFontFamily
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun DropDownMenu(options: List<String>, label: String) {
+fun DropDownMenu(options: List<String>, label: String, onOptionSelected: (String) -> Unit) {
 
     var expanded by remember { mutableStateOf(false) }
     var selectedOptionText by remember { mutableStateOf(label) }
@@ -86,6 +86,7 @@ fun DropDownMenu(options: List<String>, label: String) {
                     onClick = {
                         selectedOptionText = selectionOption
                         expanded = false
+                        onOptionSelected(selectionOption)
                     },
                 )
             }

@@ -1,5 +1,6 @@
 package com.example.hubby
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -7,12 +8,12 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
@@ -21,14 +22,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowLeft
-import androidx.compose.material.icons.filled.Menu
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
@@ -44,6 +41,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.hubby.data.model.ProductViewModel
+import com.example.hubby.ui.components.HobbyAppBar
 import com.example.hubby.ui.navigation.Screens
 import com.example.hubby.ui.theme.poppinsFontFamily
 
@@ -62,40 +61,14 @@ fun BackButton(onBackClick: () -> Unit) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun Categories(navController: NavController) {
-    var selectedCategory by remember { mutableStateOf<String?>(null) }
+fun Categories(navController: NavController,
+               productViewModel: ProductViewModel) {
+    var selectedCat by remember { mutableStateOf<String?>(null) }
 
 
     Scaffold(
-        topBar = {
-            CenterAlignedTopAppBar(
-                navigationIcon = {
-                    Icon(
-                        imageVector = Icons.Filled.Menu,
-                        tint = Color.Black,
-                        contentDescription = "Search Icon",
-                        modifier = Modifier
-                            .clickable {
-
-                            }
-                            .padding(8.dp)
-                            .size(30.dp)
-                    )
-                },
-                title = {
-                    Text(
-                        text = "Hubby",
-                        style = MaterialTheme.typography.headlineLarge,
-                        color = Color(0xFF000000),
-                    )
-                },
-                colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = Color.White
-                ),
-            )
-        },
-
-
+        topBar = { HobbyAppBar {
+        } },
         ) {
 
         Column(
@@ -107,7 +80,7 @@ fun Categories(navController: NavController) {
                 .safeDrawingPadding()
                 .background(color = Color.White)
         ) {
-
+            Spacer(modifier = Modifier.padding(top = 15.dp))
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -143,8 +116,11 @@ fun Categories(navController: NavController) {
             ) {
 
                 Box(modifier = Modifier.clickable {
-                    selectedCategory = "Pottery"
-                    navController.navigate("${Screens.FilterProducts.name}?category=${selectedCategory}")
+                    selectedCat = "Pottery"
+                    Log.d("FilterProducts", "Selected Category before nav: ${selectedCat}")
+                    productViewModel.setSelectedCategory(selectedCat!!)
+                    navController.navigate(Screens.FilterProducts.name)
+                    Log.d("FilterProducts", "Selected Category after nav: ${selectedCat}")
                 }) {
 
                     Image(
@@ -167,8 +143,11 @@ fun Categories(navController: NavController) {
 
 
                 Box(modifier = Modifier.clickable {
-                    selectedCategory = "Gardening"
-                    navController.navigate("${Screens.FilterProducts.name}?category=${selectedCategory}")
+                    selectedCat = "Gardening"
+                    Log.d("FilterProducts", "Selected Category before nav: ${selectedCat}")
+                    productViewModel.setSelectedCategory(selectedCat!!)
+                    navController.navigate(Screens.FilterProducts.name)
+                    Log.d("FilterProducts", "Selected Category after nav: ${selectedCat}")
                 }) {
                     Image(
                         painter = painterResource(id = R.drawable.pleased_gardener_man_optical_glasses_wearing_gardening_hat_holds_garden_tools_1),
