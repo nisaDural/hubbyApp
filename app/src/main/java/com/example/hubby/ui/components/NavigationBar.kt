@@ -15,7 +15,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
 import androidx.compose.material3.NavigationBarItemDefaults
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -25,16 +24,13 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.navigation.NavDestination.Companion.hierarchy
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.currentBackStackEntryAsState
+import com.example.hubby.ui.navigation.Screens
 import com.example.hubby.ui.navigation.listOfNavItems
-import com.example.hubby.ui.theme.poppinsFontFamily
 
 @Composable
 fun HobbyNavigationBar(
@@ -52,6 +48,7 @@ fun HobbyNavigationBar(
         listOfNavItems.forEach { navItem ->
             NavigationBarItem(
                 selected = currentDestination?.hierarchy?.any { it.route == navItem.route } == true,
+               // selected = navItem.route == currentDestination?.route || navItem.route == Screens.MyShop.name,
                 onClick = {
                     navController.navigate(navItem.route) {
                         popUpTo(navController.graph.findStartDestination().id) {
@@ -65,12 +62,12 @@ fun HobbyNavigationBar(
                     selectedIconColor = Color.White, indicatorColor = Color.White
                 ),
                 icon = {
-                    if (navItem.route == currentDestination?.route) {
+                    if(navItem.route == Screens.MyShop.name){
                         Box(
                             modifier = Modifier
-                                .height(53.dp)
-                                .width(130.dp)
-                                .clip(RoundedCornerShape(18.dp))
+                                .height(55.dp)
+                                .width(55.dp)
+                                .clip(CircleShape)
                                 .background(
                                     Brush.linearGradient(
                                         listOf(
@@ -95,33 +92,69 @@ fun HobbyNavigationBar(
                                         )
                                         .size(20.dp)
                                 )
-                                Text(
-                                    text = navItem.label,
-                                    style = TextStyle(
-                                        fontSize = 12.sp,
-                                        fontFamily = poppinsFontFamily,
-                                        fontWeight = FontWeight(500),
-                                        color = Color(0xFFFFFFFF),
-                                    ),
-                                    modifier = Modifier
-                                        .padding(start = 8.dp)
-                                        .fillMaxWidth(),
-                                    color = Color.White
-                                )
                             }
                         }
-                    } else {
 
-                        Row(
-                            verticalAlignment = Alignment.CenterVertically,
-                            horizontalArrangement = Arrangement.Center
-                        ) {
-                            Icon(
-                                painter = painterResource(id = navItem.icon),
-                                contentDescription = null,
-                                tint = Color(0x7F8582FF)
-                            )
 
+                    }else{
+                        if (navItem.route == currentDestination?.route ) {
+                            Box(
+                                modifier = Modifier
+                                    .height(50.dp)
+                                    .width(50.dp)
+                                    .clip(RoundedCornerShape(18.dp))
+                                    .background(
+                                        Brush.linearGradient(
+                                            listOf(
+                                                Color(0xFF1BA5DE), Color(0xFF6041B0)
+                                            )
+                                        )
+                                    )
+                                    .padding(10.dp), contentAlignment = Alignment.Center
+                            ) {
+
+                                Row(
+                                    verticalAlignment = Alignment.CenterVertically,
+                                    horizontalArrangement = Arrangement.Center
+                                ) {
+                                    Icon(
+                                        painter = painterResource(id = navItem.icon),
+                                        contentDescription = null,
+                                        tint = Color.White,
+                                        modifier = Modifier
+                                            .shadow(
+                                                elevation = 0.dp, shape = CircleShape
+                                            )
+                                            .size(20.dp)
+                                    )
+                                    /*Text(
+                                        text = navItem.label,
+                                        style = TextStyle(
+                                            fontSize = 12.sp,
+                                            fontFamily = poppinsFontFamily,
+                                            fontWeight = FontWeight(500),
+                                            color = Color(0xFFFFFFFF),
+                                        ),
+                                        modifier = Modifier
+                                            .padding(start = 8.dp)
+                                            .fillMaxWidth(),
+                                        color = Color.White
+                                    )*/
+                                }
+                            }
+                        } else {
+
+                            Row(
+                                verticalAlignment = Alignment.CenterVertically,
+                                horizontalArrangement = Arrangement.Center
+                            ) {
+                                Icon(
+                                    painter = painterResource(id = navItem.icon),
+                                    contentDescription = null,
+                                    tint = Color(0x7F8582FF)
+                                )
+
+                            }
                         }
                     }
                 },

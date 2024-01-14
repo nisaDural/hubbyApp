@@ -18,7 +18,6 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.hubby.ui.theme.poppinsFontFamily
@@ -26,26 +25,20 @@ import com.example.hubby.ui.theme.poppinsFontFamily
 @Composable
 fun GradientButton(
     gradientColors: List<Color>,
-    cornerRadius: Dp,
     nameButton: String,
-    roundedCornerShape: RoundedCornerShape
+    roundedCornerShape: RoundedCornerShape,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
 ) {
-
     Button(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(start = 32.dp, end = 32.dp),
-        onClick = {
-            //your code
-        },
-
+        modifier = modifier,
+        onClick = onClick,
         contentPadding = PaddingValues(),
         colors = ButtonDefaults.buttonColors(
             containerColor = Color.Transparent
         ),
-        shape = RoundedCornerShape(cornerRadius)
+        shape = roundedCornerShape
     ) {
-
         Box(
             modifier = Modifier
                 .fillMaxWidth()
@@ -54,20 +47,16 @@ fun GradientButton(
                     shape = roundedCornerShape
                 )
                 .clip(roundedCornerShape)
-                /*.background(
-                    brush = Brush.linearGradient(colors = gradientColors),
-                    shape = RoundedCornerShape(cornerRadius)
-                )*/
-                .padding(horizontal = 20.dp, vertical = 15.dp),
+                .padding(horizontal = 15.dp, vertical = 10.dp),
             contentAlignment = Alignment.Center
         ) {
             Text(
                 text = nameButton,
                 style = TextStyle(
-                    fontSize = 14.sp,
+                    fontSize = 16.sp,
                     fontFamily = poppinsFontFamily,
-                    fontWeight = FontWeight(400),
-                    color = Color.White,
+                    fontWeight = FontWeight(600),
+                    color = Color(0xFFFFFFFF),
                     textAlign = TextAlign.Center,
                 )
             )

@@ -1,6 +1,4 @@
-@file:OptIn(ExperimentalMaterial3Api::class, ExperimentalMaterial3Api::class)
-
-package com.example.hubby.ui.screens.home
+package com.example.hubby.ui.screens.myshopscreen
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
@@ -44,9 +42,9 @@ import com.example.hubby.ui.navigation.Screens
 import com.example.hubby.ui.theme.poppinsFontFamily
 import kotlinx.coroutines.launch
 
-
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreen(
+fun MyShopScreen(
     navController: NavHostController,
 ) {
 
@@ -88,7 +86,7 @@ fun HomeScreen(
                                 onClick = { selectedItem = index
                                     when (data) {
                                         "Categories" -> navController.navigate(Screens.Categories.name)
-                                       // "Contact Us" -> navController.navigate(Screens.ContactUs.name)
+                                        // "Contact Us" -> navController.navigate(Screens.ContactUs.name)
                                     }
                                 })
                         }
@@ -119,10 +117,8 @@ fun HomeScreen(
                     .background(color = Color.White)
             ) {
                 Spacer(modifier = Modifier.padding(top = 15.dp))
-                TabView()
+
             }
         }
     }
 }
-
-

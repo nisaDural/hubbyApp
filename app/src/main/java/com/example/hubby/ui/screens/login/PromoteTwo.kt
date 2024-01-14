@@ -32,10 +32,18 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import com.example.hubby.R
+import com.example.hubby.ui.navigation.Screens
 
 @Composable
-fun PromoteTwo(){
+fun PromoteTwo(
+    navController: NavHostController,
+    onBackButtonClicked: () -> Unit = {},
+    onSkipButtonClicked: () -> Unit = {},
+    onSignupButtonClicked: () -> Unit = {}
+
+){
 
     Box (
         //contentAlignment = Alignment.Center
@@ -54,7 +62,8 @@ fun PromoteTwo(){
             text = "Hubby",
             textAlign = TextAlign.Center,
             color = Color.White,
-            fontWeight = FontWeight.ExtraBold,
+            style = MaterialTheme.typography.headlineLarge,
+            fontWeight = FontWeight.Bold,
             fontSize = 30.sp,
             modifier = Modifier
                 .padding(20.dp)
@@ -63,7 +72,9 @@ fun PromoteTwo(){
 
 
         TextButton(
-            onClick = {},
+            onClick = {
+                navController.navigate(Screens.Login.name)
+            },
             modifier = Modifier
                 .padding(16.dp)
                 .align(Alignment.TopEnd)
@@ -79,7 +90,9 @@ fun PromoteTwo(){
             contentAlignment = Alignment.Center
         ) {
             // X
-            IconButton(onClick = {},
+            IconButton(onClick = {
+             //   navController.navigate(Screens.Promote.name)
+            },
                 modifier = Modifier
                     .padding(16.dp)
                     .align(Alignment.TopStart)
@@ -88,7 +101,7 @@ fun PromoteTwo(){
                 Icon(painter = painterResource(id = R.drawable.ok),
                     contentDescription ="",
                     modifier = Modifier.size(15.dp),
-                    tint = Color.White
+                    tint = Color.Transparent
                 )
 
             }
@@ -135,7 +148,9 @@ fun PromoteTwo(){
 
             Spacer(modifier = Modifier.height(20.dp))
 
-            Button(onClick = {},
+            Button(onClick = {
+                navController.navigate(Screens.PromoteThree.name)
+            },
                 colors = ButtonDefaults.buttonColors(
                     // renk
                    // containerColor = Color(0xFF9CBFA7)
@@ -157,9 +172,4 @@ fun PromoteTwo(){
         }
 
     }
-}
-@Preview
-@Composable
-fun PromoteTwoPreview() {
-    PromoteTwo()
 }

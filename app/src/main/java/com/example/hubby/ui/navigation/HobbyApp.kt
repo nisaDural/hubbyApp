@@ -10,6 +10,7 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.example.hubby.Categories
+import com.example.hubby.ScreenSplash
 import com.example.hubby.data.model.AddressViewModel
 import com.example.hubby.data.model.LoginViewModel
 import com.example.hubby.data.model.ProductViewModel
@@ -17,7 +18,16 @@ import com.example.hubby.data.model.UserViewModel
 import com.example.hubby.ui.ProductsAdder
 import com.example.hubby.ui.screens.FilterProducts
 import com.example.hubby.ui.screens.ShopScreen
+import com.example.hubby.ui.screens.ShoppingScreen.CheckOut
+import com.example.hubby.ui.screens.ShoppingScreen.FooterCard
+import com.example.hubby.ui.screens.ShoppingScreen.Order
+import com.example.hubby.ui.screens.ShoppingScreen.ShoppingRate
 import com.example.hubby.ui.screens.home.HomeScreen
+import com.example.hubby.ui.screens.login.PromoteFour
+import com.example.hubby.ui.screens.login.PromoteThree
+import com.example.hubby.ui.screens.myshopscreen.MyShopScreen
+import com.example.hubby.ui.screens.profile.AddShippingAddress
+import com.example.hubby.ui.screens.profile.EditingProfileScreen
 import com.example.hubby.ui.screens.profile.FooterProfileScreen
 import com.example.hubby.ui.screens.profile.MyOrders
 import com.example.hubby.ui.screens.profile.ReviewList
@@ -25,9 +35,13 @@ import com.example.hubby.ui.screens.profile.ReviewsComment
 import com.example.hubby.ui.screens.profile.Settings
 import com.example.hubby.ui.screens.profile.ShippingAddresses
 import com.example.hubby.ui.screens.profile.UserProfile
+import com.example.hubby.ui.screens.workshop.FilteringWorkshop
 import com.example.hubby.ui.screens.workshop.WorkshopScreen
 import com.nehir.hubbylogin.ui.Screen.LoginScreen
+import com.nehir.hubbylogin.ui.Screen.Promote
+import com.nehir.hubbylogin.ui.Screen.PromoteTwo
 import com.nehir.hubbylogin.ui.Screen.SignupScreen
+import com.nehir.hubbylogin.ui.ShoppingScreen.AddToCard
 
 @ExperimentalMaterial3Api
 @Composable
@@ -49,7 +63,7 @@ fun HobbyApp(
 
     NavHost(
         navController = navController,
-        startDestination = Screens.Login.name,
+        startDestination = Screens.ScreenSplash.name,
         modifier = Modifier,
     ) {
 
@@ -139,7 +153,13 @@ fun HobbyApp(
         composable(route = Screens.SignUp.name) {
             SignupScreen(
                 loginViewModel = loginViewModel,
-                navController = navController
+                navController = navController,
+                onCloseButtonClicked = {
+                    navController.navigate(Screens.Login.name)
+                },
+                onLoginButtonClicked = {
+                    navController.navigate(Screens.Login.name)
+                }
             )
         }
         composable(route = Screens.Products.name) {
@@ -152,6 +172,129 @@ fun HobbyApp(
         }
         composable(route = Screens.FilterProducts.name) {
             FilterProducts(navController, productViewModel)
+        }
+        composable(route = Screens.FilterWorkshops.name) {
+            FilteringWorkshop(navController = navController)
+        }
+        composable(route = Screens.AddShippingAddress.name) {
+            AddShippingAddress(
+                addressViewModel,
+                currentScreen,
+                navController
+            )
+        }
+        composable(route = Screens.EditProfileScreen.name) {
+            EditingProfileScreen(
+                currentScreen,
+                navController
+            )
+        }
+        composable(route = Screens.Promote.name) {
+            Promote(
+                navController,
+                onPromoteButtonClicked = {
+                    navController.navigate(Screens.PromoteFour.name)
+                },
+                onSkipButtonClicked = {
+                    navController.navigate(Screens.SignUp.name)
+                },
+                onBackButtonClicked = {
+                    navController.navigate(Screens.PromoteThree.name)
+                }
+            )
+        }
+        composable(route = Screens.PromoteTwo.name) {
+            PromoteTwo(
+                navController,
+                onBackButtonClicked = {
+                    navController.navigate(Screens.PromoteThree.name)
+                },
+                onSkipButtonClicked = {
+                    navController.navigate(Screens.Login.name)
+                },
+                onSignupButtonClicked = {
+                    navController.navigate(Screens.PromoteThree.name)
+                }
+            )
+        }
+        composable(route = Screens.CheckOut.name) {
+            CheckOut(
+                currentScreen,
+                navController
+            )
+        }
+        composable(route = Screens.FooterCard.name) {
+            FooterCard(
+                currentScreen,
+                navController,
+                onBackButtonClicked = {
+                    navController.navigate(Screens.AddToCard.name)
+                },
+                onBuyButtonClicked = {
+                    navController.navigate(Screens.CheckOut.name)
+                },
+            )
+        }
+        composable(route = Screens.AddToCard.name) {
+            AddToCard(
+                navController,
+                onAddToCardButtonClicked = {
+                    navController.navigate(Screens.FooterCard.name)
+                }
+            )
+        }
+        composable(route = Screens.Order.name) {
+            Order(
+                navController,
+                onOrderButtonClicked = {
+                    navController.navigate(Screens.ShoppingRate.name)
+                }
+            )
+        }
+        composable(route = Screens.ShoppingRate.name) {
+            ShoppingRate(
+                currentScreen,
+                navController,
+            )
+        }
+        composable(route = Screens.PromoteThree.name) {
+            PromoteThree(
+                navController,
+                onBackButtonClicked = {
+                    navController.navigate(Screens.PromoteTwo.name)
+                },
+                onSkipButtonClicked = {
+                    navController.navigate(Screens.Login.name)
+                },
+                onUnderstandButtonClicked = {
+                    navController.navigate(Screens.Promote.name)
+                }
+            )
+        }
+        composable(route = Screens.PromoteFour.name) {
+            PromoteFour(
+                navController,
+                onBackButtonClicked = {
+                    navController.navigate(Screens.Promote.name)
+                },
+                onSkipButtonClicked = {
+                    navController.navigate(Screens.Login.name)
+                },
+                onReadyButtonClicked = {
+                    navController.navigate(Screens.Login.name)
+                }
+
+            )
+        }
+        composable(route = Screens.ScreenSplash.name) {
+            ScreenSplash(
+                navController,
+            )
+        }
+        composable(route = Screens.MyShop.name) {
+            MyShopScreen(
+                navController,
+            )
         }
     }
 }

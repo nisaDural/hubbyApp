@@ -2,8 +2,12 @@ package com.example.hubby.ui.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.heightIn
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.KeyboardArrowDown
@@ -38,14 +42,14 @@ fun DropDownMenu(options: List<String>, label: String, onOptionSelected: (String
     ExposedDropdownMenuBox(
         expanded = expanded,
         onExpandedChange = { expanded = !expanded },
-        modifier = Modifier.width(116.dp)
+        modifier = Modifier.width(130.dp),
     ) {
         OutlinedTextField(
             modifier = Modifier.menuAnchor(),
             readOnly = true,
             value = selectedOptionText,
             textStyle = TextStyle(
-                fontSize = 12.sp,
+                fontSize = 11.sp,
                 fontFamily = poppinsFontFamily,
                 fontWeight = FontWeight(400),
                 color = Color(0xFFBDBDC1),
@@ -70,25 +74,35 @@ fun DropDownMenu(options: List<String>, label: String, onOptionSelected: (String
                 textColor = Color(0xFFBDBDC1),
             )
         )
-        ExposedDropdownMenu(
-            expanded = expanded,
-            onDismissRequest = {
-                expanded = false
-            }, modifier = Modifier
-                .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(8.dp))
-                .border(width = 1.dp, color = Color(0xFFE0E0E0), shape = RoundedCornerShape(8.dp))
-                .padding(1.dp)
-                .padding(top = 4.dp, bottom = 4.dp)
-        ) {
-            options.forEach { selectionOption ->
-                DropdownMenuItem(
-                    text = { Text(selectionOption) },
-                    onClick = {
-                        selectedOptionText = selectionOption
-                        expanded = false
-                        onOptionSelected(selectionOption)
-                    },
-                )
+        if (expanded) {
+            Box(
+                modifier = Modifier
+                    .width(130.dp)
+                    .heightIn(max = 200.dp)
+                    .background(color = Color.Transparent)
+            ) {
+                LazyColumn(
+                    modifier = Modifier
+                        .background(color = Color(0xFFFFFFFF), shape = RoundedCornerShape(8.dp))
+                        .border(
+                            width = 1.dp,
+                            color = Color(0xFFE0E0E0),
+                            shape = RoundedCornerShape(8.dp)
+                        )
+                        .padding(1.dp)
+                        .padding(top = 4.dp, bottom = 4.dp)
+                ) {
+                    items(options) { selectionOption ->
+                        DropdownMenuItem(
+                            text = { Text(selectionOption) },
+                            onClick = {
+                                selectedOptionText = selectionOption
+                                expanded = false
+                                onOptionSelected(selectionOption)
+                            },
+                        )
+                    }
+                }
             }
         }
     }

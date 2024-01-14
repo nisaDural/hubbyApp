@@ -1,8 +1,10 @@
 package com.example.hubby.repository
 
+import com.example.hubby.data.model.Product
 import com.example.hubby.data.model.User
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.CollectionReference
+import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.channels.awaitClose
@@ -68,8 +70,79 @@ class UserRepository() {
         }
     }
 
+    fun addFavorite(
+        productImg: String,
+        productId: String,
+        userId: String,
+    ): Flow<Response<Boolean>> = flow {
+        var operationSuccessful = false
+        try {
+            val favoriteProduct = Product(
+                id = productId,
+                image = productImg,
+                userId = userId,
+            )
+            FirebaseFirestore.getInstance().collection("users")
+                .document(userId)
+                .collection("favorites").document(productId).set(favoriteProduct)
+                .addOnSuccessListener {
+                    operationSuccessful = true
+                }.await()
+            if (operationSuccessful) {
+                emit(Response.Success(operationSuccessful))
+            }
+        } catch (e: Exception) {
+            emit(Response.Error(e.localizedMessage ?: "An Unexpected error"))
+
+        }
+
+    }
+
+    fun removeFavorite(
+        productId: String,
+        userId: String,
+    ): Flow<Response<Boolean>> = flow {
+        var operationSuccessful = false
+        try {
+            val favoritesCollection = Firebase.firestore.collection("users")
+                .document(userId)
+                .collection("favorites")
+
+            favoritesCollection.document(productId).delete().addOnSuccessListener {
+                operationSuccessful = true
+            }.await()
+            if (operationSuccessful) {
+                emit(Response.Success(operationSuccessful))
+            }
+        } catch (e: Exception) {
+            emit(Response.Error(e.localizedMessage ?: "An Unexpected error"))
+        }
+    }
+
+    fun isFavorite(
+        productId: String,
+        userId: String,
+    ): Flow<Response<Boolean>> = flow {
+        var operationSuccessful = false
+        try {
+            val favoritesCollection = Firebase.firestore.collection("users")
+                .document(userId)
+                .collection("favorites")
+
+            favoritesCollection.whereEqualTo("productId", productId).get().addOnSuccessListener {
+                operationSuccessful = true
+            }.await()
+            if (operationSuccessful) {
+                emit(Response.Success(operationSuccessful))
+            }
+        } catch (e: Exception) {
+            emit(Response.Error(e.localizedMessage ?: "An Unexpected error"))
+        }
+    }
+
 
 }
+
 
 sealed class Response<out T> {
     object Loading : Response<Nothing>()

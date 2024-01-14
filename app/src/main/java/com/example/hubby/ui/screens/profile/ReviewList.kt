@@ -19,13 +19,9 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
 import androidx.compose.material3.ExperimentalMaterial3Api
-import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
@@ -150,7 +146,7 @@ fun ReviewList(
                     .fillMaxWidth()
                     .padding(horizontal = 20.dp)
             ) {
-                TextButton(
+               /*TextButton(
                     onClick = onReplyButtonClicked,
                 ) {
                     Row {
@@ -173,7 +169,7 @@ fun ReviewList(
                         )
 
                     }
-                }
+                }*/
             }
             Box(
                 modifier = Modifier
@@ -183,111 +179,6 @@ fun ReviewList(
                     .background(Color(0xFFF4F4F4))
             )
             ///////////////////////////////////////////////////////////////
-            Row(
-                modifier = Modifier
-                    .padding(top = 20.dp, start = 20.dp, end = 20.dp, bottom = 8.dp)
-                    .fillMaxWidth()
-            ) {
-                Box(
-                    contentAlignment = Alignment.Center,
-                    modifier = Modifier
-                        .size(130.dp)
-                        .background(
-                            brush = Brush.linearGradient(
-                                colors = listOf(
-                                    Color(0xFFDADADA).copy(alpha = 0.3f),
-                                    Color(0xFFDEDEDE).copy(alpha = 0.3f)
-                                )
-                            ), shape = RoundedCornerShape(20.dp)
-                        )
-
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_launcher_background),
-                        contentDescription = "image description",
-                        modifier = Modifier
-                            .clip(
-                                RoundedCornerShape(20.dp)
-                            )
-                            .width(90.dp)
-                            .height(90.dp),
-                        contentScale = ContentScale.FillBounds
-                    )
-                }
-                Column(modifier = Modifier.padding(start = 8.dp)) {
-                    Text(
-                        text = "Mood Desk", style = TextStyle(
-                            fontSize = 20.sp,
-                            lineHeight = 32.sp,
-                            fontFamily = poppinsFontFamily,
-                            fontWeight = FontWeight(400),
-                            color = Color.Black,
-                            textAlign = TextAlign.Center
-                        )
-                    )
-                    Text(
-                        text = "14 FEB 2023", style = TextStyle(
-                            fontSize = 14.sp,
-                            lineHeight = 32.sp,
-                            fontFamily = poppinsFontFamily,
-                            fontWeight = FontWeight(400),
-                            color = Color(0xFF1BDEDA),
-                            textAlign = TextAlign.Center,
-                        )
-                    )
-                    RatingBar(currentRating = myRating, onRatingChanged = { myRating = it })
-                    Text(
-                        text = "sjkndaksndwaklsndlkadklwadklwamdjlkawndklandwklnlawkndwklnwakndwlakdawk",
-                        style = TextStyle(
-                            fontSize = 10.sp,
-                            lineHeight = 17.sp,
-                            fontFamily = poppinsFontFamily,
-                            fontWeight = FontWeight(400),
-                            color = Color(0xFF000000),
-                        )
-                    )
-
-                }
-            }
-
-            Row(
-                horizontalArrangement = Arrangement.End,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(horizontal = 20.dp)
-            ) {
-                TextButton(
-                    onClick = onReplyButtonClicked,
-                ) {
-                    Row {
-                        Icon(
-                            Icons.Default.ArrowBack,
-                            contentDescription = null,
-                            tint = Color(0xFF706C6C),
-                            modifier = Modifier.size(20.dp)
-                        )
-                        Text(
-                            text = "Reply",
-                            style = TextStyle(
-                                fontSize = 14.sp,
-                                lineHeight = 25.sp,
-                                fontFamily = poppinsFontFamily,
-                                fontWeight = FontWeight(400),
-                                color = Color(0xFF706C6C),
-                                textAlign = TextAlign.Center,
-                            )
-                        )
-
-                    }
-                }
-            }
-            Box(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(vertical = 8.dp, horizontal = 20.dp)
-                    .height(4.dp)
-                    .background(Color(0xFFF4F4F4))
-            )
         }
     }
 }

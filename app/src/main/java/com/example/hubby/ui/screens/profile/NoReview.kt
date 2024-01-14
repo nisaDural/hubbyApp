@@ -89,7 +89,7 @@ fun NoReview() {
                 listOf(
                     Color(0xFF1BA5DE), Color(0xFF6041B0)
                 ),
-                cornerRadius = 18.dp,
+                onClick = {},
                 nameButton = "CONTINUE SHOPPING",
                 roundedCornerShape = RoundedCornerShape(18.dp)
             )

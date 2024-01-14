@@ -72,7 +72,7 @@ fun ShippingAddresses(
                         canNavigateBack = navController.previousBackStackEntry != null,
                         navigateUp = { navController.navigateUp() },
                         endIcon = Icons.Rounded.Add,
-                        onEndIconClick = {}
+                        onEndIconClick = {navController.navigate(Screens.AddShippingAddress.name)}
                     )
                 }
             ) {

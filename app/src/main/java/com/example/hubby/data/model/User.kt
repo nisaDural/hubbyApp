@@ -8,4 +8,5 @@ data class User(
     val title: String = "",
     val categories: List<String> = listOf(),
     var imageUrl: String = "",
+    val wishlist: List<Product>? = emptyList()
 )
