@@ -13,8 +13,10 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ExitToApp
 import androidx.compose.material.icons.filled.KeyboardArrowRight
@@ -88,10 +90,13 @@ fun FooterProfileScreen(
                         HobbyNavigationBar(navController = navController)
                     }) {
                         Column(
-                            modifier = Modifier.padding(it)
+                            modifier = Modifier
+                                .padding(it)
+                                .verticalScroll(rememberScrollState())
                         ) {
                             Row(
                                 horizontalArrangement = Arrangement.SpaceBetween,
+                                verticalAlignment = Alignment.CenterVertically,
                                 modifier = Modifier
                                     .fillMaxWidth()
                                     .padding(horizontal = 20.dp)
@@ -144,7 +149,7 @@ fun FooterProfileScreen(
                             ) {
                                 ProfileCard(
                                     title = "Orders",
-                                    description = "Already have 10 orders / You ordered 5",
+                                    description = "You have 5 orders",
                                     onClick = onMyOrdersClicked
                                 )
                                 Spacer(modifier = Modifier.padding(bottom = 20.dp))
@@ -168,7 +173,7 @@ fun FooterProfileScreen(
                                 Spacer(modifier = Modifier.padding(bottom = 20.dp))
                                 ProfileCard(
                                     title = "Settings",
-                                    description = "Notifications, Password",
+                                    description = "Add Category, Title, Image",
                                     onClick = onSettingClicked
                                 )
                             }

@@ -61,11 +61,13 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.hubby.BackButton
 import com.example.hubby.data.model.Product
 import com.example.hubby.data.model.ProductViewModel
+import com.example.hubby.data.model.UserViewModel
 import com.example.hubby.repository.Response
 import com.example.hubby.ui.components.DropDownMenu
 import com.example.hubby.ui.components.HobbyAppBar
@@ -79,17 +81,20 @@ import kotlin.random.Random
 fun FilterProducts(
     navController: NavHostController,
     productViewModel: ProductViewModel
-
 ) {
 
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
     val menuList = listOf("Categories", "Contact Us")
     var selectedItem by remember { mutableStateOf(-1) }
-
     var selectedCat by remember { mutableStateOf("All") }
 
-    var filteredProducts = listOf<Product>()
+    var selectedOption by remember { mutableStateOf("") }
+
+    var filteredProducts by remember { mutableStateOf(listOf<Product>()) }
+
+    val userViewModel: UserViewModel = viewModel()
+
 
     productViewModel.getAllProducts()
 
@@ -97,12 +102,12 @@ fun FilterProducts(
         selectedCat = productViewModel.selectedCategory.value ?: "All"
     }
 
-    LaunchedEffect(filteredProducts) {
-        // filteredProducts değiştiğinde yapılacak işlemler burada
-        Log.d("FilterProducts", "Filtered Products changed: $filteredProducts")
+    LaunchedEffect(productViewModel.filteredProducts) {
+        filteredProducts = productViewModel.filteredProducts.value
     }
 
     when (val response = productViewModel.productData.value) {
+
         is Response.Loading -> {
             CircularProgressIndicator()
         }
@@ -113,7 +118,12 @@ fun FilterProducts(
                 allProducts
             } else {
                 allProducts.filter { it.category == selectedCat }
+
             }
+
+
+
+
 
             Column(
             ) {
@@ -196,7 +206,7 @@ fun FilterProducts(
                                     }
                                 })
                                 Text(
-                                    text = selectedCat,
+                                    text = "$selectedCat | $selectedOption",
                                     modifier = Modifier
                                         .weight(1f)
                                         .wrapContentWidth(Alignment.CenterHorizontally),
@@ -211,17 +221,49 @@ fun FilterProducts(
                                 modifier = Modifier.fillMaxWidth()
                             ) {
                                 DropDownMenu(
-                                    options = listOf("Small", "Medium", "Large"),
+                                    options = listOf("Small", "Medium", "Large", "All"),
                                     label = "SIZE",
-                                    onOptionSelected = {
+                                    onOptionSelected = { selectedSortOption ->
+                                        selectedOption = selectedSortOption
+                                        Log.d("sizes", "Selected size: $selectedSortOption")
+
+                                        filteredProducts = if (selectedSortOption == "All") {
+                                            allProducts
+                                        } else {
+                                            allProducts.filter { product ->
+                                                selectedSortOption in product.sizes.orEmpty()
+                                            }
+                                        }
                                     }
                                 )
 
                                 DropDownMenu(
-                                    options = listOf(),
+                                    options = listOf(
+                                        "White",
+                                        "Black",
+                                        "Gray",
+                                        "Red",
+                                        "Blue",
+                                        "Yellow",
+                                        "Green",
+                                        "Pink",
+                                        "Brown",
+                                        "All"
+                                    ),
                                     label = "COLOR",
-                                    onOptionSelected = {
+                                    onOptionSelected = { selectedSortOption ->
+                                        selectedOption = selectedSortOption
+                                        Log.d("colors", "Selected color: $selectedSortOption")
 
+                                        filteredProducts = if (selectedSortOption == "All") {
+                                            allProducts
+
+                                        } else {
+
+                                            allProducts.filter { product ->
+                                                selectedSortOption in product.colors.orEmpty()
+                                            }
+                                        }
                                     })
                                 DropDownMenu(
                                     options = listOf(
@@ -230,14 +272,51 @@ fun FilterProducts(
                                         "Lowest Price",
                                         "Highest Price"
                                     ), label = "SORT BY",
-                                    onOptionSelected = {selectedSortOption ->
+                                    onOptionSelected = { selectedSortOption ->
+                                        selectedOption = selectedSortOption
                                         Log.d("aaaaa", "Selected sort: ${selectedSortOption}")
                                         when (selectedSortOption) {
                                             "Lowest Price" -> {
                                                 Log.d("aaaaa", "before sort: ${filteredProducts}")
                                                 // Fiyata göre sırala (artan sıra)
-                                                filteredProducts = filteredProducts.toMutableList().sortedBy { it.price }
+                                                filteredProducts =
+                                                    filteredProducts.sortedBy { it.price }
                                                 Log.d("aaaaa", "after sort: ${filteredProducts}")
+                                            }
+
+                                            "Highest Price" -> {
+                                                Log.d(
+                                                    "Highest Price",
+                                                    "before sort: ${filteredProducts}"
+                                                )
+                                                // Fiyata göre sırala (artan sıra)
+                                                filteredProducts =
+                                                    filteredProducts.sortedByDescending { it.price }
+                                                Log.d(
+                                                    "Highest Price",
+                                                    "after sort: ${filteredProducts}"
+                                                )
+                                            }
+
+                                            "Best Sellers" -> {
+                                                Log.d(
+                                                    "Best Sellers",
+                                                    "before sort: ${filteredProducts}"
+                                                )
+                                                // Fiyata göre sırala (artan sıra)
+                                                filteredProducts =
+                                                    filteredProducts.sortedByDescending { it.unitsSold }
+                                                Log.d(
+                                                    "Best Sellers",
+                                                    "after sort: ${filteredProducts}"
+                                                )
+                                            }
+
+                                            "All" -> {
+                                                Log.d("All", "before sort: ${filteredProducts}")
+                                                // Fiyata göre sırala (artan sıra)
+                                                filteredProducts = allProducts
+                                                Log.d("All", "after sort: ${filteredProducts}")
                                             }
                                             // Diğer sıralama seçeneklerini ekleyebilirsiniz.
 
@@ -257,6 +336,9 @@ fun FilterProducts(
                                     horizontalArrangement = Arrangement.spacedBy(15.dp)
                                 ) {
                                     items(filteredProducts) { product ->
+                                        LaunchedEffect(userViewModel.isFavorite) {
+                                            userViewModel.checkFavoriteStatus(product.id)
+                                        }
                                         val randomHeight = Random.nextInt(190, 270)
                                         Column(
                                             modifier = Modifier
@@ -276,11 +358,24 @@ fun FilterProducts(
                                                         .height(randomHeight.dp - 30.dp),
                                                     contentScale = ContentScale.Crop
                                                 )
-                                                IconButton(onClick = {}) {
+                                                IconButton(onClick = {
+                                                    userViewModel.toggleFavorite(
+                                                        productId = product.id,
+                                                        productImg = product.image
+                                                    )
+                                                }) {
+                                                    val iconTint =
+                                                        if (userViewModel.isFavorite.value) {
+                                                            Color.Red
+                                                        } else {
+                                                            Color(0xFF6D6661)
+                                                        }
+
+
                                                     Icon(
                                                         imageVector = Icons.Filled.Favorite,
                                                         contentDescription = null,
-                                                        tint = Color(0xFF6D6661),
+                                                        tint = iconTint,
                                                         modifier = Modifier
                                                             .padding(2.dp)
                                                     )
@@ -311,6 +406,8 @@ fun FilterProducts(
                 LocalContext.current, response.message, Toast.LENGTH_SHORT
             ).show()
         }
+
+
     }
 }
 

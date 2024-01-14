@@ -1,9 +1,11 @@
 <resources>
     <string name="app_name">Hobby</string>
     <string name="profile">PROFILE</string>
-    <string name="my_orders">MY ORDERS</string>
+    <string name="my_orders">ORDERS</string>
     <string name="shipping_addresses">SHIPPING ADDRESSES</string>
     <string name="my_reviews">MY REVIEWS</string>
     <string name="reviews_comment">REVIEWS COMMENT</string>
     <string name="settings">SETTINGS</string>
+    <string name="check_out">CHECK OUT</string>
+    <string name="footer_card">MY CARD</string>
 </resources>

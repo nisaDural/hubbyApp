@@ -24,8 +24,17 @@ class ProductViewModel(
     private val _selectedCategory = mutableStateOf<String?>(null)
     val selectedCategory: State<String?> = _selectedCategory
 
+    private val _filteredProducts = mutableStateOf<List<Product>>(listOf())
+    val filteredProducts: State<List<Product>> = _filteredProducts
+
+
+
     fun setSelectedCategory(category: String) {
         _selectedCategory.value = category
+    }
+
+    fun setFilteredProducts(products: List<Product>) {
+        _filteredProducts.value = products
     }
 
     fun getAllProducts() {
@@ -35,6 +44,8 @@ class ProductViewModel(
             }
         }
     }
+
+
 
     fun uploadProduct(
         image: String,
@@ -75,5 +86,4 @@ class ProductViewModel(
             }
         }
     }
-
 }

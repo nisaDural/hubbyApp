@@ -23,6 +23,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -123,11 +124,13 @@ fun ThreeTextWithCard(
                 Text(
                     text = "Hubby",
                     fontSize = 48.sp,
-                    style = TextStyle(fontWeight = FontWeight.Bold, fontFamily = FontFamily.Serif),
+                    style = MaterialTheme.typography.headlineLarge,
+
+                   // style = TextStyle(fontWeight = FontWeight.Bold, fontFamily = FontFamily.Serif),
                     color = Color.White
                 )
 
-                Spacer(modifier = Modifier.height(155.dp))
+                Spacer(modifier = Modifier.height(55.dp))
 
                 // CARD
                 Card(
@@ -217,10 +220,10 @@ fun ThreeTextWithCard(
                             },
                             modifier = Modifier
                                 .fillMaxWidth()
-                                .padding(horizontal = 17.dp)
+                                .padding(horizontal = 15.dp)
                                 .padding(top = 17.dp),
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = Color(0xFF9CBFA7), Color(0xFFC9F299)
+                                containerColor =  Color(0xFFA7EBA5)  ,Color(0xFF9CBFA7)
                                 //contentColor = Color.White
                             ),
 
@@ -262,7 +265,7 @@ fun ThreeTextWithCard(
                             onClick = {},
                             colors = ButtonDefaults.buttonColors(
                                 // renk
-                                containerColor = Color(0xFF9CBFA7), Color(0xFFC9F299)
+                                containerColor =  Color(0xFFA7EBA5)  ,Color(0xFF9CBFA7)
                             ),
                             modifier = Modifier
                                 .fillMaxWidth()

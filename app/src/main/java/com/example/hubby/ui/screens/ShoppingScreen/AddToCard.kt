@@ -1,11 +1,13 @@
 package com.nehir.hubbylogin.ui.ShoppingScreen
 
+import android.annotation.SuppressLint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -18,9 +20,11 @@ import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -39,12 +43,29 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.rememberNavController
 import com.example.hubby.R
+import com.example.hubby.ui.components.HobbyNavigationBar
+import com.example.hubby.ui.navigation.Screens
 
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+@ExperimentalMaterial3Api
 @Composable
-fun AddToCard(){
+fun AddToCard(
+    navController: NavHostController,
+    onAddToCardButtonClicked: () -> Unit = {},
+){
     var quantity by remember { mutableStateOf(1) }
     var isButtonClicked by remember { mutableStateOf(false) }
+    Scaffold (
+        bottomBar = {
+            HobbyNavigationBar(navController = rememberNavController())
+        }
+    )
+    {
+
+
 Column {
 
 
@@ -95,7 +116,7 @@ Column {
         }
 
     }
-
+    Spacer(modifier = Modifier.weight(1f))
     Box(
         modifier = Modifier
             .fillMaxWidth()
@@ -132,7 +153,7 @@ Column {
             contentDescription = "",
             tint = Color(0xFFFFD700),
             modifier = Modifier
-                .padding(10.dp)
+                .padding(1.dp)
         )
         Text(
             text = "4.5",
@@ -144,7 +165,8 @@ Column {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
+            .padding(3.dp)
+            .padding(end = 10.dp),
        horizontalArrangement = Arrangement.End,
         verticalAlignment = Alignment.CenterVertically )
     {
@@ -185,17 +207,22 @@ IconButton(onClick = { if (quantity > 1) quantity--},
             fontWeight = FontWeight.Normal,
             fontFamily = FontFamily.Serif),
         color = Color.Black,
+        modifier = Modifier.padding(start = 10.dp)
         )
-    Text(text = "alt metin" )
+    Text(text = "alt metin" ,
+        modifier = Modifier.padding(start = 10.dp)
+        )
     Box (
-        modifier = Modifier.fillMaxSize()
+        modifier = Modifier
+            .fillMaxSize()
             .padding(10.dp),
         contentAlignment = Alignment.CenterStart
     ) {
         IconButton(
             onClick = { isButtonClicked = !isButtonClicked },
             modifier = Modifier
-                .size(48.dp)
+                .size(70.dp)
+                .padding(bottom = 35.dp)
             //    .padding(10.dp)
              //   .align(Alignment.TopStart)
         ) {
@@ -209,15 +236,20 @@ IconButton(onClick = { if (quantity > 1) quantity--},
           modifier = Modifier.fillMaxSize(),
            contentAlignment = Alignment.CenterEnd
      ){
-            Button(onClick = {},
+            Button(onClick = {
+                navController.navigate(Screens.FooterCard.name)
+            },
                 colors = ButtonDefaults.buttonColors(
                     containerColor =Color(0xFFC9F299) , Color(0xFF9CBFA7)
                 ),
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(20.dp)
-                    .padding(end = 16.dp, top = 12.dp)
-                    .padding(horizontal = 80.dp),
+                    .padding(10.dp)
+                    .padding(start = 60.dp)
+
+                  //  .padding(end = .dp, top = 12.dp)
+                  //  .padding(horizontal = 13.dp)
+                    .padding(bottom = 65.dp),
                  //   .align(Alignment.TopEnd),
                  //   .padding(top = 40.dp),
                 contentPadding = PaddingValues(vertical = 18.dp),
@@ -228,6 +260,7 @@ IconButton(onClick = { if (quantity > 1) quantity--},
                     fontWeight = FontWeight.Bold,
                     color = Color.White)
           }
+
        }
 
     }
@@ -236,14 +269,18 @@ IconButton(onClick = { if (quantity > 1) quantity--},
 
 
 
+}
+
+
+
 
 
 
 
 }
     }
-@Preview
+/*@Preview
 @Composable
 fun AddToCardPreview(){
     AddToCard()
-}
+}*/

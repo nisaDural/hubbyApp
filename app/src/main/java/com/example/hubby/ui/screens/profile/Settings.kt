@@ -19,9 +19,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
-import androidx.compose.material3.ElevatedCard
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
@@ -42,6 +42,7 @@ import com.example.hubby.ui.components.TitleAppBar
 import com.example.hubby.ui.navigation.Screens
 import com.example.hubby.ui.theme.poppinsFontFamily
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun Settings(
     userViewModel: UserViewModel,
@@ -75,7 +76,6 @@ fun Settings(
                         .background(color = Color.White),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
-
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -95,180 +95,60 @@ fun Settings(
                             tint = Color.Black,
                             contentDescription = "Search Icon",
                             modifier = Modifier
-                                .clickable {}
+                                .clickable {
+                                    navController.navigate(Screens.EditProfileScreen.name)
+                                }
                                 .padding(8.dp)
                                 .size(24.dp))
                     }
-                    ElevatedCard(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 4.dp, start = 20.dp, end = 20.dp),
-                        colors = CardDefaults.elevatedCardColors(Color.White),
-                        elevation = CardDefaults.cardElevation(
-                            defaultElevation = 10.dp
-                        ),
-                        shape = RoundedCornerShape(8.dp),
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(
-                                start = 16.dp, top = 12.dp, end = 0.dp, bottom = 12.dp
-                            )
-                        ) {
-                            Text(
-                                text = "Name", style = TextStyle(
-                                    fontSize = 12.sp,
-                                    fontFamily = poppinsFontFamily,
-                                    fontWeight = FontWeight(400),
-                                    color = Color(0xFF808080),
-                                )
-                            )
-                            Text(
-                                text = obj!!.name, style = TextStyle(
-                                    fontSize = 14.sp,
-                                    fontFamily = poppinsFontFamily,
-                                    fontWeight = FontWeight(600),
-                                    color = Color(0xFF242424),
-                                )
-                            )
-                        }
-                    }
-                    ElevatedCard(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 11.dp, start = 20.dp, end = 20.dp),
-                        colors = CardDefaults.elevatedCardColors(Color.White),
-                        elevation = CardDefaults.cardElevation(
-                            defaultElevation = 10.dp
-                        ),
-                        shape = RoundedCornerShape(8.dp),
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(
-                                start = 16.dp, top = 12.dp, end = 0.dp, bottom = 12.dp
-                            )
-                        ) {
-                            Text(
-                                text = "Email", style = TextStyle(
-                                    fontSize = 12.sp,
-                                    fontFamily = poppinsFontFamily,
-                                    fontWeight = FontWeight(400),
-                                    color = Color(0xFF808080),
-                                )
-                            )
-                            Text(
-                                text = obj!!.email, style = TextStyle(
-                                    fontSize = 14.sp,
-                                    fontFamily = poppinsFontFamily,
-                                    fontWeight = FontWeight(600),
-                                    color = Color(0xFF242424),
-                                )
-                            )
-                        }
-                    }
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 36.dp, end = 20.dp, top = 12.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "Privacy & Security", style = TextStyle(
-                                fontSize = 16.sp,
-                                fontFamily = poppinsFontFamily,
-                                fontWeight = FontWeight(600),
-                                color = Color(0xFF909191),
-                            )
-                        )
-                        Icon(imageVector = Icons.Filled.Edit,
-                            tint = Color.Black,
-                            contentDescription = "Search Icon",
-                            modifier = Modifier
-                                .clickable {}
-                                .padding(8.dp)
-                                .size(24.dp))
-                    }
-                    ElevatedCard(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 12.dp, start = 20.dp, end = 20.dp),
-                        colors = CardDefaults.elevatedCardColors(Color.White),
-                        elevation = CardDefaults.cardElevation(
-                            defaultElevation = 10.dp
-                        ),
-                        shape = RoundedCornerShape(8.dp),
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(
-                                start = 16.dp, top = 12.dp, end = 0.dp, bottom = 12.dp
-                            )
-                        ) {
-                            Text(
-                                text = "Application Password", style = TextStyle(
-                                    fontSize = 16.sp,
-                                    lineHeight = 20.sp,
-                                    fontFamily = poppinsFontFamily,
-                                    fontWeight = FontWeight(600),
-                                    color = Color(0xFF242424),
-                                )
-                            )
-                        }
-                    }
-                    Row(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(start = 36.dp, end = 20.dp, top = 12.dp),
-                        horizontalArrangement = Arrangement.SpaceBetween,
-                        verticalAlignment = Alignment.CenterVertically
-                    ) {
-                        Text(
-                            text = "Notifications", style = TextStyle(
-                                fontSize = 16.sp,
-                                fontFamily = poppinsFontFamily,
-                                fontWeight = FontWeight(600),
-                                color = Color(0xFF909191),
-                            )
-                        )
-                    }
-                    ElevatedCard(
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 12.dp, start = 20.dp, end = 20.dp),
-                        colors = CardDefaults.elevatedCardColors(Color.White),
-                        elevation = CardDefaults.cardElevation(
-                            defaultElevation = 10.dp
-                        ),
-                        shape = RoundedCornerShape(8.dp),
-                    ) {
-                        Column(
-                            modifier = Modifier.padding(
-                                start = 16.dp, top = 12.dp, end = 0.dp, bottom = 12.dp
-                            )
-                        ) {
-                            Text(
-                                text = "Sales", style = TextStyle(
-                                    fontSize = 16.sp,
-                                    lineHeight = 20.sp,
-                                    fontFamily = poppinsFontFamily,
-                                    fontWeight = FontWeight(600),
-                                    color = Color(0xFF242424),
-                                )
-                            )
-                        }
-                    }
-
-
+                    UserInfoCard(title = "Name", value = obj!!.name)
+                    UserInfoCard(title = "Email", value = obj!!.email)
+                    UserInfoCard(title = "Title", value = obj!!.title)
                 }
             }
-
         }
 
         is Response.Error -> {
             Toast.makeText(
                 LocalContext.current, response.message, Toast.LENGTH_SHORT
             ).show()
-
         }
     }
+}
 
+@Composable
+fun UserInfoCard(title: String, value: String) {
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(top = 11.dp, start = 20.dp, end = 20.dp),
+        colors = CardDefaults.elevatedCardColors(Color.White),
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 10.dp
+        ),
+        shape = RoundedCornerShape(8.dp),
+    ) {
+        Column(
+            modifier = Modifier.padding(
+                start = 16.dp, top = 12.dp, end = 0.dp, bottom = 12.dp
+            )
+        ) {
+            Text(
+                text = title, style = TextStyle(
+                    fontSize = 12.sp,
+                    fontFamily = poppinsFontFamily,
+                    fontWeight = FontWeight(400),
+                    color = Color(0xFF808080),
+                )
+            )
+            Text(
+                text = value, style = TextStyle(
+                    fontSize = 14.sp,
+                    fontFamily = poppinsFontFamily,
+                    fontWeight = FontWeight(600),
+                    color = Color(0xFF242424),
+                )
+            )
+        }
+    }
 }

@@ -146,7 +146,9 @@ fun WorkshopListContent(it: Workshop) {
                                 .padding(start = 6.dp)
                         )
                     }
-                    WorkshopTypeChip(type = it.type)
+                    WorkshopTypeChip(type = it.type, Modifier
+                        .height(22.dp)
+                        .width(51.dp))
                 }
                 Column(modifier = Modifier.padding(top = 150.dp, start = 15.dp)) {
                     Row(verticalAlignment = Alignment.CenterVertically) {
@@ -183,13 +185,11 @@ fun WorkshopListContent(it: Workshop) {
 }
 
 @Composable
-fun WorkshopTypeChip(type: String?) {
+fun WorkshopTypeChip(type: String?, modifier: Modifier) {
     Image(
         painterResource(id = if (type == "video") R.drawable.video_chip else R.drawable.event_chip),
         contentDescription = null,
-        modifier = Modifier
-            .height(22.dp)
-            .width(51.dp)
+        modifier = modifier
     )
 }
 

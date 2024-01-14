@@ -22,7 +22,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.material.icons.outlined.Edit
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.DrawerValue
@@ -49,12 +49,16 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
 import com.example.hubby.R
 import com.example.hubby.data.model.UserViewModel
 import com.example.hubby.repository.Response
 import com.example.hubby.ui.components.HobbyAppBar
+import com.example.hubby.ui.theme.poppinsFontFamily
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -109,6 +113,7 @@ fun UserProfile(
                                 .safeDrawingPadding()
                                 .background(color = Color.White)
                         ) {
+                            Spacer(modifier = Modifier.height(30.dp))
                             Row(
                                 modifier = Modifier
                                     .padding(horizontal = 24.dp)
@@ -116,20 +121,40 @@ fun UserProfile(
                                 horizontalArrangement = Arrangement.SpaceBetween,
                             ) {
                                 Column(verticalArrangement = Arrangement.Center) {
-                                    Row {
-                                        Text(text = obj.name)
-                                        Icon(imageVector = Icons.Filled.Search,
+                                    Row(
+                                        verticalAlignment = Alignment.CenterVertically
+                                    ) {
+                                        Text(
+                                            text = obj.name,
+                                            style = TextStyle(
+                                                fontSize = 25.sp,
+                                                fontFamily = poppinsFontFamily,
+                                                fontWeight = FontWeight(500),
+                                                color = Color(0xFF000000),
+                                            )
+                                        )
+                                        Spacer(modifier = Modifier.width(10.dp))
+                                        Icon(imageVector = Icons.Outlined.Edit,
                                             tint = Color.Black,
-                                            contentDescription = "Search Icon",
+                                            contentDescription = "",
                                             modifier = Modifier
                                                 .clickable {
 
                                                 }
                                                 .padding(horizontal = 8.dp)
-                                                .size(24.dp))
+                                                .size(19.dp))
 
                                     }
-                                    Text(text = obj.title)
+                                    Text(
+                                        text = obj.title,
+                                        style = TextStyle(
+                                            fontSize = 15.sp,
+                                            lineHeight = 26.sp,
+                                            fontFamily = poppinsFontFamily,
+                                            fontWeight = FontWeight(400),
+                                            color = Color(0xFF000000),
+                                        )
+                                    )
                                 }
                                 AsyncImage(
                                     model = obj.imageUrl,
@@ -140,6 +165,7 @@ fun UserProfile(
                                         .size(55.dp)
                                 )
                             }
+                            Spacer(modifier = Modifier.height(12.dp))
                             Row(modifier = Modifier.padding(horizontal = 24.dp)) {
                                 UserCategories(categories = obj.categories)
                             }
@@ -277,7 +303,15 @@ fun CategoryItem(category: String, color: Color) {
                     .background(color)
             )
             Text(
-                text = category, modifier = Modifier.padding(start = 4.dp, end = 16.dp)
+                text = category, modifier = Modifier.padding(start = 4.dp, end = 16.dp),
+                style = TextStyle(
+                    fontSize = 12.sp,
+                    lineHeight = 26.sp,
+                    fontFamily = poppinsFontFamily,
+                    fontWeight = FontWeight(300),
+                    color = Color(0xFF000000),
+
+                    )
             )
         }
     }

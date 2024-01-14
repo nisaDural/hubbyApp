@@ -22,6 +22,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
@@ -52,10 +53,12 @@ import com.example.hubby.ui.navigation.Screens
 @Composable
 fun SignupScreen(
     loginViewModel: LoginViewModel,
-    navController: NavHostController
+    navController: NavHostController,
+    onCloseButtonClicked: () -> Unit = {},
+    onLoginButtonClicked: () -> Unit = {}
 ) {
 
-    //var checkBoxOneState = remember { mutableStateOf(true) }
+  //  var checkBoxOneState = remember { mutableStateOf(true) }
 
 
     val loginUiState = loginViewModel?.loginUiState
@@ -80,7 +83,9 @@ fun SignupScreen(
                 .align(Alignment.TopCenter)
         )
         TextButton(
-            onClick = {},
+            onClick = {
+                      navController.navigate(Screens.Login.name)
+            },
             modifier = Modifier
                 .padding(16.dp)
                 .align(Alignment.TopEnd)
@@ -99,7 +104,9 @@ fun SignupScreen(
     ) {
         // X
         IconButton(
-            onClick = {},
+            onClick = {
+                      navController.navigate(Screens.Login.name)
+            },
             modifier = Modifier
                 .padding(16.dp)
                 .align(Alignment.TopStart)
@@ -161,7 +168,7 @@ fun SignupScreen(
                 .padding(top = 10.dp),
 
             keyboardOptions = KeyboardOptions(
-                keyboardType = KeyboardType.Email
+                keyboardType = KeyboardType.Password
             ),
             singleLine = true,
             visualTransformation = PasswordVisualTransformation(),
@@ -242,7 +249,9 @@ fun SignupScreen(
         Text(
             text = "Hubby",
             fontSize = 35.sp,
-            style = TextStyle(fontWeight = FontWeight.Bold, fontFamily = FontFamily.Serif),
+            style = MaterialTheme.typography.headlineLarge,
+            fontWeight = FontWeight.ExtraBold,
+           // style = TextStyle(fontWeight = FontWeight.Bold, fontFamily = FontFamily.Serif),
             color = Color.Black
 
         )
