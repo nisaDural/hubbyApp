@@ -48,7 +48,7 @@ fun AddressField(
         modifier = Modifier
             .fillMaxWidth()
             .padding(top = 20.dp, start = 20.dp, end = 20.dp)
-            .height(64.dp),
+            .height(80.dp),
         colors = CardDefaults.elevatedCardColors(Color.White),
         elevation = CardDefaults.cardElevation(
             defaultElevation = 20.dp
@@ -57,7 +57,7 @@ fun AddressField(
     ) {
         Column(
             modifier = Modifier.padding(
-                start = 16.dp, top = 10.dp, end = 0.dp, bottom = 10.dp
+                start = 16.dp, top = 8.dp, end = 0.dp, bottom = 8.dp
             ),
             verticalArrangement = Arrangement.Center,
         ) {
@@ -67,7 +67,7 @@ fun AddressField(
                     Text(
                         text = title,
                         style = TextStyle(
-                            fontSize = 14.sp,
+                            fontSize = 12.sp,
                             fontFamily = poppinsFontFamily,
                             fontWeight = FontWeight(500),
                             color = Color(0xFF9B9B9B),
@@ -80,7 +80,7 @@ fun AddressField(
                 ),
                 onValueChange = { newValue -> onValueChanged(newValue) },
                 textStyle = TextStyle(
-                    fontSize = 14.sp,
+                    fontSize = 12.sp,
                     fontFamily = poppinsFontFamily,
                     fontWeight = FontWeight(600),
                     color = Color(0xFF242424),

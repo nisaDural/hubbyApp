@@ -51,6 +51,7 @@ import com.example.hubby.ui.components.TitleAppBar
 import com.example.hubby.ui.navigation.Screens
 import com.example.hubby.ui.theme.poppinsFontFamily
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun FooterProfileScreen(
     userViewModel: UserViewModel,
@@ -107,7 +108,7 @@ fun FooterProfileScreen(
                                     modifier = Modifier
                                         .clip(CircleShape)
                                         .size(82.dp),
-                                    contentScale = ContentScale.FillWidth// Adjust the size as needed
+                                    contentScale = ContentScale.FillBounds
                                 )
 
                                 Column(
@@ -162,7 +163,6 @@ fun FooterProfileScreen(
                                 ProfileCard(title = "Payment Method",
                                     description = "You have 2 cards",
                                     onClick = {
-                                        navController.navigate(Screens.Products.name)
                                     })
                                 Spacer(modifier = Modifier.padding(bottom = 20.dp))
                                 ProfileCard(

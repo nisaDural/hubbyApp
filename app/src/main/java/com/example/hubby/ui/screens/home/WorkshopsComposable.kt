@@ -65,7 +65,6 @@ fun Workshops(selectedIndex: Int) {
             Column(
                 modifier = Modifier.padding(
                     start = 20.dp,
-                    end = 20.dp,
                     bottom = 32.dp,
                     top = 28.dp
                 )
@@ -87,100 +86,101 @@ fun Workshops(selectedIndex: Int) {
                         }
                     )
                 }
-
             }
-
         }
 
         is Response.Error -> {
             Toast.makeText(
                 LocalContext.current, response.message, Toast.LENGTH_SHORT
             ).show()
-
         }
     }
-
 }
 
 @Composable
 fun WorkshopListContent(it: Workshop) {
-    Column(modifier = Modifier.padding(top = 15.dp)) {
-        Box {
-            AsyncImage(
-                model = it.image,
-                contentDescription = "",
-                modifier = Modifier
-                    .clip(
-                        RoundedCornerShape(16.dp)
-                    )
-                    .width(190.dp)
-                    .height(270.dp),
-                contentScale = ContentScale.FillBounds
-            )
-            Column(
-                modifier = Modifier
-                    .width(190.dp)
-                    .height(270.dp),
-            ) {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                    horizontalArrangement = Arrangement.SpaceBetween,
+    Row {
+        Column(modifier = Modifier.padding(top = 15.dp)) {
+            Box {
+                AsyncImage(
+                    model = it.image,
+                    contentDescription = "",
                     modifier = Modifier
-                        .padding(15.dp)
-                        .width(160.dp)
+                        .clip(
+                            RoundedCornerShape(16.dp)
+                        )
+                        .width(190.dp)
+                        .height(270.dp),
+                    contentScale = ContentScale.FillBounds
+                )
+                Column(
+                    modifier = Modifier
+                        .width(190.dp)
+                        .height(270.dp),
                 ) {
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
+                        horizontalArrangement = Arrangement.SpaceBetween,
+                        modifier = Modifier
+                            .padding(15.dp)
+                            .width(160.dp)
                     ) {
-                        Icon(
-                            imageVector = Icons.Outlined.AccountCircle,
-                            contentDescription = null,
-                            tint = Color.White,
-                            modifier = Modifier.size(16.dp)
-                        )
-                        Text(
-                            text = it.participations?.size.toString(),
-                            color = Color.White,
-                            textAlign = TextAlign.Center,
-                            modifier = Modifier
-                                .padding(start = 6.dp)
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            Icon(
+                                imageVector = Icons.Outlined.AccountCircle,
+                                contentDescription = null,
+                                tint = Color.White,
+                                modifier = Modifier.size(16.dp)
+                            )
+                            Text(
+                                text = it.participations?.size.toString(),
+                                color = Color.White,
+                                textAlign = TextAlign.Center,
+                                modifier = Modifier
+                                    .padding(start = 6.dp)
+                            )
+                        }
+                        WorkshopTypeChip(
+                            type = it.type, Modifier
+                                .height(22.dp)
+                                .width(51.dp)
                         )
                     }
-                    WorkshopTypeChip(type = it.type, Modifier
-                        .height(22.dp)
-                        .width(51.dp))
-                }
-                Column(modifier = Modifier.padding(top = 150.dp, start = 15.dp)) {
-                    Row(verticalAlignment = Alignment.CenterVertically) {
-                        AsyncImage(
-                            model = it.userImg,
-                            contentDescription = "",
-                            modifier = Modifier
-                                .clip(CircleShape)
-                                .size(20.dp),
-                            contentScale = ContentScale.FillWidth
-                        )
-                        Spacer(modifier = Modifier.width(4.dp))
+                    Column(modifier = Modifier.padding(top = 150.dp, start = 15.dp)) {
+                        Row(verticalAlignment = Alignment.CenterVertically) {
+                            AsyncImage(
+                                model = it.userImg,
+                                contentDescription = "",
+                                modifier = Modifier
+                                    .clip(CircleShape)
+                                    .size(20.dp),
+                                contentScale = ContentScale.FillWidth
+                            )
+                            Spacer(modifier = Modifier.width(4.dp))
+                            Text(
+                                text = it.userName.toString(), style = TextStyle(
+                                    fontSize = 12.sp,
+                                    fontFamily = poppinsFontFamily,
+                                    fontWeight = FontWeight(400),
+                                    color = Color(0xFFEAEAEA),
+                                )
+                            )
+                        }
                         Text(
-                            text = it.userName.toString(), style = TextStyle(
-                                fontSize = 12.sp,
+                            text = it.title.toString(), style = TextStyle(
+                                fontSize = 14.sp,
                                 fontFamily = poppinsFontFamily,
                                 fontWeight = FontWeight(400),
-                                color = Color(0xFFEAEAEA),
+                                color = Color(0xFFFCFAFE),
                             )
                         )
                     }
-                    Text(
-                        text = it.title.toString(), style = TextStyle(
-                            fontSize = 14.sp,
-                            fontFamily = poppinsFontFamily,
-                            fontWeight = FontWeight(400),
-                            color = Color(0xFFFCFAFE),
-                        )
-                    )
                 }
             }
         }
+        Spacer(modifier = Modifier.width(23.dp))
     }
 }
 

@@ -32,5 +32,7 @@ enum class Screens(@StringRes val title: Int? = null) {
     FilterWorkshops,
     AddShippingAddress(title = R.string.shipping_addresses),
     EditProfileScreen(title = R.string.settings),
-    MyShop
+    MyShop,
+    UploadWorkshop,
+    UploadProduct
 }

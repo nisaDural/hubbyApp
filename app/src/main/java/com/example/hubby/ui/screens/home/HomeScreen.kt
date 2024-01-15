@@ -52,7 +52,7 @@ fun HomeScreen(
 
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
-    val menuList = listOf("Categories", "Contact Us")
+    val menuList = listOf("Categories")
     var selectedItem by remember { mutableStateOf(-1) }
 
     ModalNavigationDrawer(
@@ -88,7 +88,6 @@ fun HomeScreen(
                                 onClick = { selectedItem = index
                                     when (data) {
                                         "Categories" -> navController.navigate(Screens.Categories.name)
-                                       // "Contact Us" -> navController.navigate(Screens.ContactUs.name)
                                     }
                                 })
                         }

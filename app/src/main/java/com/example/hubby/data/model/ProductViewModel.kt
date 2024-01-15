@@ -24,13 +24,29 @@ class ProductViewModel(
     private val _selectedCategory = mutableStateOf<String?>(null)
     val selectedCategory: State<String?> = _selectedCategory
 
+    private val _selectedProduct = mutableStateOf<String?>(null)
+    val selectedProduct: State<String?> = _selectedProduct
+
     private val _filteredProducts = mutableStateOf<List<Product>>(listOf())
     val filteredProducts: State<List<Product>> = _filteredProducts
 
+    private val _shoppingCart = mutableStateOf<List<Product>>(listOf())
+    val shoppingCart: State<List<Product>> = _shoppingCart
 
+    fun addToCart(product: Product) {
+        _shoppingCart.value = _shoppingCart.value + product
+    }
+
+    fun removeFromCart(product: Product) {
+        _shoppingCart.value = _shoppingCart.value - product
+    }
 
     fun setSelectedCategory(category: String) {
         _selectedCategory.value = category
+    }
+
+    fun setSelectedProduct(product: String) {
+        _selectedProduct.value = product
     }
 
     fun setFilteredProducts(products: List<Product>) {
@@ -86,4 +102,5 @@ class ProductViewModel(
             }
         }
     }
+
 }

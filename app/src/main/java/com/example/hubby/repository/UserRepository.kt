@@ -47,15 +47,22 @@ class UserRepository() {
         }
     }
 
-    fun setUserDetails(
+    fun updateUserDetails(
         userId: String,
         name: String,
+        title: String?,
+        categories: List<String>?,
+        imageUrl: String?,
     ): Flow<Response<Boolean>> = flow {
-        operationSuccessful = false
+        var operationSuccessful = false
         try {
-            val userObj = mutableMapOf<String, String>()
-            userObj["fullName"] = name
-            userRef.document(userId).update(userObj as Map<String, Any>)
+            val userObj = mutableMapOf<String, Any?>(
+                "name" to name,
+                "title" to title,
+                "categories" to categories,
+                "imageUrl" to imageUrl,
+            )
+            Firebase.firestore.collection("users").document(userId).update(userObj)
                 .addOnSuccessListener {
                     operationSuccessful = true
                 }.await()

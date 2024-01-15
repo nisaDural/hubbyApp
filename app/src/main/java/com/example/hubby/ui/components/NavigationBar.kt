@@ -90,7 +90,7 @@ fun HobbyNavigationBar(
                                         .shadow(
                                             elevation = 0.dp, shape = CircleShape
                                         )
-                                        .size(20.dp)
+                                        .size(27.dp)
                                 )
                             }
                         }

@@ -146,7 +146,7 @@ fun UserProfile(
 
                                     }
                                     Text(
-                                        text = obj.title,
+                                        text = obj.title ?: "",
                                         style = TextStyle(
                                             fontSize = 15.sp,
                                             lineHeight = 26.sp,
@@ -159,7 +159,7 @@ fun UserProfile(
                                 AsyncImage(
                                     model = obj.imageUrl,
                                     contentDescription = "",
-                                    contentScale = ContentScale.FillWidth,
+                                    contentScale = ContentScale.FillBounds,
                                     modifier = Modifier
                                         .clip(CircleShape)
                                         .size(55.dp)
@@ -327,5 +327,5 @@ fun getCategoryColor(category: String): Color {
 
         )
 
-    return colorList[category]!!
+    return colorList[category] ?: Color.Gray
 }

@@ -46,12 +46,15 @@ class UserViewModel(
         }
     }
 
-    fun setUserInfo(name: String) {
+    fun updateUserInfo(name: String, categories: List<String>, title: String, imageUrl: String ) {
         if (userId != null) {
             viewModelScope.launch {
-                repository.setUserDetails(
+                repository.updateUserDetails(
                     userId = userId,
-                    name = name
+                    name = name,
+                    categories = categories,
+                    title = title,
+                    imageUrl = imageUrl,
                 ).collect {
                     _setUserData.value = it
                 }
