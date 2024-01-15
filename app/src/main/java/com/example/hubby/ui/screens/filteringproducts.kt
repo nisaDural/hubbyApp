@@ -8,6 +8,7 @@ package com.example.hubby.ui.screens
 import android.util.Log
 import android.widget.Toast
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -120,10 +121,6 @@ fun FilterProducts(
                 allProducts.filter { it.category == selectedCat }
 
             }
-
-
-
-
 
             Column(
             ) {
@@ -343,7 +340,12 @@ fun FilterProducts(
                                         Column(
                                             modifier = Modifier
                                                 .fillMaxWidth()
-                                                .height(randomHeight.dp),
+                                                .height(randomHeight.dp)
+                                                .clickable {
+                                                    navController.navigate(Screens.AddToCard.name)
+                                                    var pid = productViewModel.setSelectedProduct(product.id)
+                                                    Log.d("productid", "selectedproductid: ${pid}")
+                                                },
                                             horizontalAlignment = Alignment.CenterHorizontally
                                         ) {
                                             Box {
@@ -408,6 +410,7 @@ fun FilterProducts(
         }
 
 
+        else -> {}
     }
 }
 

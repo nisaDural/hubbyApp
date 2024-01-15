@@ -1,11 +1,8 @@
 package com.example.hubby.ui.screens.ShoppingScreen
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.interaction.DragInteraction
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -17,7 +14,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.safeDrawingPadding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.layout.wrapContentWidth
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -32,10 +28,6 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Tab
-import androidx.compose.material3.TabRow
-import androidx.compose.material3.TabRowDefaults
-import androidx.compose.material3.TabRowDefaults.tabIndicatorOffset
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -46,15 +38,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavHostController
+import coil.compose.AsyncImage
 import com.example.hubby.R
+import com.example.hubby.data.model.ProductViewModel
 import com.example.hubby.ui.components.HobbyNavigationBar
 import com.example.hubby.ui.components.TitleAppBar
 import com.example.hubby.ui.navigation.Screens
@@ -66,15 +57,13 @@ fun FooterCard(
     currentScreen: Screens,
     navController: NavHostController,
     onBackButtonClicked: () -> Unit = {},
-    onBuyButtonClicked: () -> Unit = {}
+    onBuyButtonClicked: () -> Unit = {},
+    productViewModel: ProductViewModel
 ) {
     var quantity by remember { mutableStateOf(1) }
     var total by remember { mutableStateOf(0) }
 
-    val cards = listOf(
-        "Minimal Stand" to 19.0,
-        "Coffee Table" to 20.0
-    )
+    val cards = productViewModel.shoppingCart.value
 
     Scaffold(
         topBar = {
@@ -104,17 +93,16 @@ fun FooterCard(
             verticalArrangement = Arrangement.SpaceBetween
         ) {
 
-            for ((productName, productPrice) in cards) {
+            for (product in cards) {
                 ProductCard(
-                    productName = productName,
-                    productPrice = productPrice,
+                    productName = product.name,
+                    productPrice = product.price,
+                    productImage = product.image,
                     onQuantityChange = { newQuantity ->
-                        quantity = newQuantity
-                        // Calculate total price here based on the new quantity
-                        total = quantity * productPrice.toInt()
+                        // ... handle quantity change if needed ...
                     },
                     onDeleteClicked = {
-                        // Handle product deletion here
+                        productViewModel.removeFromCart(product)
                     }
                 )
             }
@@ -180,6 +168,7 @@ fun FooterCard(
 fun ProductCard(
     productName: String,
     productPrice: Double,
+    productImage: String,
     onQuantityChange: (Int) -> Unit,
     onDeleteClicked: () -> Unit
 ) {
@@ -197,8 +186,8 @@ fun ProductCard(
             //     verticalAlignment = Alignment.CenterVertically
             //  .clip(RoundedCornerShape(16.dp))
         ) {
-            Image(
-                painterResource(id = R.drawable.card), contentDescription = "",
+            AsyncImage(
+                model=productImage, contentDescription = "",
                 modifier = Modifier
                     .size(120.dp)
                     .padding(13.dp)
@@ -257,7 +246,7 @@ fun ProductCard(
                 }
             }
             IconButton(
-                onClick = { },
+                onClick = { onDeleteClicked.invoke()},
                 modifier = Modifier
                     .padding(start = 100.dp)
             ) {

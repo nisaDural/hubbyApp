@@ -103,7 +103,7 @@ fun Settings(
                     }
                     UserInfoCard(title = "Name", value = obj!!.name)
                     UserInfoCard(title = "Email", value = obj!!.email)
-                    UserInfoCard(title = "Title", value = obj!!.title)
+                    UserInfoCard(title = "Title", value = obj.title ?: "")
                 }
             }
         }

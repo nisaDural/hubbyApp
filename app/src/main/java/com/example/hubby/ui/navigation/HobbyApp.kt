@@ -15,7 +15,7 @@ import com.example.hubby.data.model.AddressViewModel
 import com.example.hubby.data.model.LoginViewModel
 import com.example.hubby.data.model.ProductViewModel
 import com.example.hubby.data.model.UserViewModel
-import com.example.hubby.ui.ProductsAdder
+import com.example.hubby.data.model.WorkshopViewModel
 import com.example.hubby.ui.screens.FilterProducts
 import com.example.hubby.ui.screens.ShopScreen
 import com.example.hubby.ui.screens.ShoppingScreen.CheckOut
@@ -26,6 +26,8 @@ import com.example.hubby.ui.screens.home.HomeScreen
 import com.example.hubby.ui.screens.login.PromoteFour
 import com.example.hubby.ui.screens.login.PromoteThree
 import com.example.hubby.ui.screens.myshopscreen.MyShopScreen
+import com.example.hubby.ui.screens.myshopscreen.UploadProductScreen
+import com.example.hubby.ui.screens.myshopscreen.UploadWorkshopScreen
 import com.example.hubby.ui.screens.profile.AddShippingAddress
 import com.example.hubby.ui.screens.profile.EditingProfileScreen
 import com.example.hubby.ui.screens.profile.FooterProfileScreen
@@ -162,11 +164,6 @@ fun HobbyApp(
                 }
             )
         }
-        composable(route = Screens.Products.name) {
-            ProductsAdder(
-                productViewModel
-            )
-        }
         composable(route = Screens.Categories.name) {
             Categories(navController, productViewModel)
         }
@@ -186,7 +183,8 @@ fun HobbyApp(
         composable(route = Screens.EditProfileScreen.name) {
             EditingProfileScreen(
                 currentScreen,
-                navController
+                navController,
+                userViewModel
             )
         }
         composable(route = Screens.Promote.name) {
@@ -214,7 +212,8 @@ fun HobbyApp(
                 },
                 onSignupButtonClicked = {
                     navController.navigate(Screens.PromoteThree.name)
-                }
+                },
+                loginViewModel
             )
         }
         composable(route = Screens.CheckOut.name) {
@@ -233,6 +232,7 @@ fun HobbyApp(
                 onBuyButtonClicked = {
                     navController.navigate(Screens.CheckOut.name)
                 },
+                productViewModel
             )
         }
         composable(route = Screens.AddToCard.name) {
@@ -240,7 +240,8 @@ fun HobbyApp(
                 navController,
                 onAddToCardButtonClicked = {
                     navController.navigate(Screens.FooterCard.name)
-                }
+                },
+                productViewModel
             )
         }
         composable(route = Screens.Order.name) {
@@ -294,6 +295,18 @@ fun HobbyApp(
         composable(route = Screens.MyShop.name) {
             MyShopScreen(
                 navController,
+            )
+        }
+        composable(route = Screens.UploadProduct.name) {
+            UploadProductScreen(
+                navController,
+                productViewModel
+            )
+        }
+        composable(route = Screens.UploadWorkshop.name) {
+            UploadWorkshopScreen(
+                navController,
+                workshopViewModel = WorkshopViewModel()
             )
         }
     }

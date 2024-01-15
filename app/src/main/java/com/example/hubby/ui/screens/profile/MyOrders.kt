@@ -180,7 +180,7 @@ fun MyOrders(
                         modifier = Modifier
                             .width(140.dp)
                             .height(36.dp),
-                        onClick = { navController.navigate(Screens.ReviewsComment.name) }) {
+                        onClick = { navController.navigate(Screens.ShoppingRate.name) }) {
                         Text(text = "RATE ORDER", color = Color.White)
                     }
                     Icon(
