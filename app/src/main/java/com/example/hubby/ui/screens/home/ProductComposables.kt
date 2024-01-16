@@ -1,6 +1,7 @@
 package com.example.hubby.ui.screens.home
 
 import android.widget.Toast
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -18,12 +19,14 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import coil.compose.AsyncImage
+import com.example.hubby.R
 import com.example.hubby.data.model.Product
 import com.example.hubby.data.model.ProductViewModel
 import com.example.hubby.repository.Response
@@ -64,10 +67,24 @@ fun TrendingProducts(selectedIndex: Int) {
                     )
                 )
 
-                LazyRow {
-                    items(filteredProducts, itemContent = {
-                        ProductListContent(it)
-                    })
+                if (filteredProducts.isEmpty()) {
+                    Image(
+                        painter = painterResource(id = R.drawable.noproduct),
+                        contentDescription = "",
+                        modifier = Modifier
+                            .clip(
+                                RoundedCornerShape(16.dp)
+                            )
+                            .width(190.dp)
+                            .height(270.dp),
+                        contentScale = ContentScale.FillBounds
+                    )
+                } else {
+                    LazyRow {
+                        items(filteredProducts, itemContent = {
+                            ProductListContent(it)
+                        })
+                    }
                 }
             }
         }

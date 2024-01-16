@@ -94,7 +94,7 @@ fun HobbyApp(
             )
         }
         composable(route = Screens.UserProfile.name) {
-            UserProfile(userViewModel)
+            UserProfile(userViewModel, navController)
         }
         composable(route = Screens.MyOrders.name) {
             MyOrders(

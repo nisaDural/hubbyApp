@@ -51,6 +51,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -83,6 +84,7 @@ fun FilterProducts(
     navController: NavHostController,
     productViewModel: ProductViewModel
 ) {
+    var isLiked by rememberSaveable { mutableStateOf(false) }
 
     val scope = rememberCoroutineScope()
     val drawerState = rememberDrawerState(initialValue = DrawerValue.Closed)
@@ -334,7 +336,10 @@ fun FilterProducts(
                                 ) {
                                     items(filteredProducts) { product ->
                                         LaunchedEffect(userViewModel.isFavorite) {
-                                            userViewModel.checkFavoriteStatus(product.id)
+                                            userViewModel.addFavorite(
+                                                productId = product.id,
+                                                productImg = product.image
+                                            )
                                         }
                                         val randomHeight = Random.nextInt(190, 270)
                                         Column(
@@ -343,7 +348,8 @@ fun FilterProducts(
                                                 .height(randomHeight.dp)
                                                 .clickable {
                                                     navController.navigate(Screens.AddToCard.name)
-                                                    var pid = productViewModel.setSelectedProduct(product.id)
+                                                    var pid =
+                                                        productViewModel.setSelectedProduct(product.id)
                                                     Log.d("productid", "selectedproductid: ${pid}")
                                                 },
                                             horizontalAlignment = Alignment.CenterHorizontally
@@ -361,23 +367,18 @@ fun FilterProducts(
                                                     contentScale = ContentScale.Crop
                                                 )
                                                 IconButton(onClick = {
-                                                    userViewModel.toggleFavorite(
-                                                        productId = product.id,
-                                                        productImg = product.image
-                                                    )
+                                                    isLiked = !isLiked
                                                 }) {
-                                                    val iconTint =
-                                                        if (userViewModel.isFavorite.value) {
-                                                            Color.Red
-                                                        } else {
-                                                            Color(0xFF6D6661)
-                                                        }
-
+                                                    /*val iconTint = if (isLiked) {
+                                                        Color.Red
+                                                    } else {
+                                                        Color(0xFF6D6661)
+                                                    }*/
 
                                                     Icon(
                                                         imageVector = Icons.Filled.Favorite,
                                                         contentDescription = null,
-                                                        tint = iconTint,
+                                                        tint = Color(0xFF6D6661),
                                                         modifier = Modifier
                                                             .padding(2.dp)
                                                     )
