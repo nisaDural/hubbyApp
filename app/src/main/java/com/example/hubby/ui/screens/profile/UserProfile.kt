@@ -53,18 +53,21 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavHostController
 import coil.compose.AsyncImage
 import com.example.hubby.R
 import com.example.hubby.data.model.UserViewModel
 import com.example.hubby.repository.Response
 import com.example.hubby.ui.components.HobbyAppBar
+import com.example.hubby.ui.navigation.Screens
 import com.example.hubby.ui.theme.poppinsFontFamily
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun UserProfile(
-    userViewModel: UserViewModel
+    userViewModel: UserViewModel,
+    navController: NavHostController
 ) {
 
     userViewModel.getUserInfo()
@@ -139,6 +142,7 @@ fun UserProfile(
                                             contentDescription = "",
                                             modifier = Modifier
                                                 .clickable {
+                                                    navController.navigate(Screens.EditProfileScreen.name)
 
                                                 }
                                                 .padding(horizontal = 8.dp)

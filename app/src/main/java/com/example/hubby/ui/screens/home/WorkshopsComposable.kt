@@ -62,6 +62,8 @@ fun Workshops(selectedIndex: Int) {
                 allWorkshops.filter { it.category == selectedCategory }
             }
 
+
+
             Column(
                 modifier = Modifier.padding(
                     start = 20.dp,
@@ -77,17 +79,30 @@ fun Workshops(selectedIndex: Int) {
                         color = Color(0xFF000000),
                     )
                 )
-
-                LazyRow {
-                    items(
-                        filteredWorkshops,
-                        itemContent = {
-                            WorkshopListContent(it = it)
-                        }
-                    )
+                if (filteredWorkshops.isEmpty()) {
+                    Image(
+                        painter = painterResource(id = R.drawable.noworkshop),
+                        contentDescription = "",
+                        modifier = Modifier
+                            .clip(
+                                RoundedCornerShape(16.dp)
+                            )
+                            .width(190.dp)
+                            .height(270.dp),
+                        contentScale = ContentScale.FillBounds)
+                } else {
+                    LazyRow {
+                        items(
+                            filteredWorkshops,
+                            itemContent = {
+                                WorkshopListContent(it = it)
+                            }
+                        )
+                    }
                 }
             }
         }
+
 
         is Response.Error -> {
             Toast.makeText(

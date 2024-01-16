@@ -33,7 +33,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 
 @Composable
-fun  Work(){
+fun Work() {
     val userId = Firebase.auth.currentUser!!.uid
     val productViewModel: ProductViewModel = viewModel()
     productViewModel.getUserProducts(userId = userId)
@@ -70,57 +70,64 @@ fun  Work(){
                     modifier = Modifier.padding(horizontal = 24.dp, vertical = 10.dp)
                 )
                 Row(modifier = Modifier.padding(horizontal = 24.dp, vertical = 16.dp)) {
-                    AsyncImage(
-                        model = obj.get(0).image,
-                        contentDescription = "",
-                        modifier = Modifier
-                            .clip(
-                                RoundedCornerShape(24.dp)
-                            )
-                            .width(240.dp)
-                            .height(121.dp),
-                        contentScale = ContentScale.FillWidth // Adjust the size as needed
-                    )
+
+                        AsyncImage(
+                            model = obj.get(0).image,
+                            contentDescription = "",
+                            modifier = Modifier
+                                .clip(
+                                    RoundedCornerShape(24.dp)
+                                )
+                                .width(240.dp)
+                                .height(121.dp),
+                            contentScale = ContentScale.FillWidth // Adjust the size as needed
+                        )
+
                     Spacer(modifier = Modifier.width(16.dp))
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_launcher_background),
-                        contentDescription = "image description",
-                        modifier = Modifier
-                            .clip(
-                                RoundedCornerShape(24.dp)
-                            )
-                            .width(120.dp)
-                            .height(121.dp),
-                        contentScale = ContentScale.FillBounds
-                    )
-                }
+
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_launcher_background),
+                            contentDescription = "image description",
+                            modifier = Modifier
+                                .clip(
+                                    RoundedCornerShape(24.dp)
+                                )
+                                .width(120.dp)
+                                .height(121.dp),
+                            contentScale = ContentScale.FillBounds
+                        )
+                    }
                 Row(modifier = Modifier.padding(horizontal = 24.dp)) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_launcher_background),
-                        contentDescription = "image description",
-                        modifier = Modifier
-                            .clip(
-                                RoundedCornerShape(24.dp)
-                            )
-                            .width(120.dp)
-                            .height(121.dp),
-                        contentScale = ContentScale.FillBounds
-                    )
+
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_launcher_background),
+                            contentDescription = "image description",
+                            modifier = Modifier
+                                .clip(
+                                    RoundedCornerShape(24.dp)
+                                )
+                                .width(120.dp)
+                                .height(121.dp),
+                            contentScale = ContentScale.FillBounds
+                        )
+
                     Spacer(modifier = Modifier.width(16.dp))
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_launcher_background),
-                        contentDescription = "image description",
-                        modifier = Modifier
-                            .clip(
-                                RoundedCornerShape(24.dp)
-                            )
-                            .width(240.dp)
-                            .height(121.dp),
-                        contentScale = ContentScale.FillBounds
-                    )
+                        Image(
+                            painter = painterResource(id = R.drawable.ic_launcher_background),
+                            contentDescription = "image description",
+                            modifier = Modifier
+                                .clip(
+                                    RoundedCornerShape(24.dp)
+                                )
+                                .width(240.dp)
+                                .height(121.dp),
+                            contentScale = ContentScale.FillBounds
+                        )
+
                 }
             }
         }
+
         is Response.Error -> {
             Toast.makeText(
                 LocalContext.current, response.message, Toast.LENGTH_SHORT
